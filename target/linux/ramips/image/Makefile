@@ -33,6 +33,8 @@ KERNEL_LOADADDR := $(loadaddr-y)
 
 KERNEL_DTB = kernel-bin | patch-dtb | lzma
 define Device/Default
+  PROFILES = Default $$(DTS)
+  KERNEL_DEPENDS = $$(wildcard ../dts/$$(DTS).dts)
   KERNEL := $(KERNEL_DTB) | uImage lzma
   IMAGES := sysupgrade.bin
   IMAGE_SIZE := $(ralink_default_fw_size_8M)
@@ -885,19 +887,11 @@ include mt7620.mk
 endif
 
 #
-# MT7620A-8m Profiles
-#
-
-ifeq ($(SUBTARGET),mt7620-8m)
-include mt7620-8m.mk
-endif
-
-#
 # MT7621 Profiles
 #
 
 ifeq ($(SUBTARGET),mt7621)
-  TARGET_DEVICES += pbr-m1 newifi-d1 newifi-d2 zbt-we1326 ghl
+  TARGET_DEVICES := pbr-m1 newifi-d1 newifi-d2 zbt-we1326 ghl jdcloud-1
 endif
 
 define Device/mt7621
@@ -968,6 +962,11 @@ endef
 
 define Device/ghl
   DTS := GHL
+  IMAGE_SIZE := $(ralink_default_fw_size_32M)
+endef
+
+define Device/jdcloud-1
+  DTS := JDCloud-1
   IMAGE_SIZE := $(ralink_default_fw_size_32M)
 endef
 
