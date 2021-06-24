@@ -152,6 +152,28 @@ define Device/K2T
 endef
 TARGET_DEVICES += K2T
 
+define Device/CSAC
+  BOARDNAME = CSAC
+  CONSOLE = ttyATH0,115200
+  KERNEL_SIZE := 1472k
+  ROOTFS_SIZE := 14528k
+  IMAGE_SIZE := 16000k
+  MTDPARTS := spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,14528k(rootfs),1472k(kernel),64k(art)ro,16000k@0x50000(firmware)
+  IMAGE/sysupgrade.bin := append-rootfs | pad-rootfs | pad-to $$$$(ROOTFS_SIZE) | append-kernel | check-size $$$$(IMAGE_SIZE)
+endef
+TARGET_DEVICES += CSAC
+
+define Device/LG-A291Q
+  BOARDNAME = LG-A291Q
+  CONSOLE = ttyATH0,115200
+  KERNEL_SIZE := 1472k
+  ROOTFS_SIZE := 14528k
+  IMAGE_SIZE := 16000k
+  MTDPARTS := spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,14528k(rootfs),1472k(kernel),64k(art)ro,16000k@0x50000(firmware)
+  IMAGE/sysupgrade.bin := append-rootfs | pad-rootfs | pad-to $$$$(ROOTFS_SIZE) | append-kernel | check-size $$$$(IMAGE_SIZE)
+endef
+TARGET_DEVICES += LG-A291Q
+
 define Device/wndr3700
   BOARDNAME = WNDR3700
   NETGEAR_KERNEL_MAGIC = 0x33373030
@@ -248,7 +270,7 @@ $(Device/tplink)
 endef
 
 define Device/tl-wdr4300-v1
-$(Device/tplink-8mlzma)
+$(Device/tplink-16mlzma)
   BOARDNAME = TL-WDR4300
   DEVICE_PROFILE = TLWDR4300
   TPLINK_HWID := 0x43000001
@@ -518,7 +540,7 @@ define Device/tl-wr740n-v5
 endef
 
 define Device/tl-wr740n-v6
-    $(Device/tplink-4mlzma)
+    $(Device/tplink-16mlzma)
     BOARDNAME := TL-WR841N-v9
     DEVICE_PROFILE := TLWR740
     TPLINK_HWID := 0x07400006
@@ -563,7 +585,7 @@ define Device/mw153r
 endef
 
 define Device/tl-wr743nd-v2
-    $(Device/tplink-4mlzma)
+    $(Device/tplink-16mlzma)
     BOARDNAME := TL-WR741ND-v4
     DEVICE_PROFILE := TLWR743
     TPLINK_HWID := 0x07430002
@@ -572,14 +594,14 @@ endef
 TARGET_DEVICES += tl-wr740n-v4 tl-wr740n-v5 tl-wr740n-v6 tl-wr741nd-v1 tl-wr741nd-v2 tl-wr741nd-v4 tl-wr741nd-v5 mw153r tl-wr743nd-v2
 
 define Device/tl-wr841n-v8
-    $(Device/tplink-4mlzma)
+    $(Device/tplink-16mlzma)
     BOARDNAME := TL-WR841N-v8
     DEVICE_PROFILE := TLWR841
     TPLINK_HWID := 0x08410008
 endef
 
 define Device/tl-wr841n-v9
-    $(Device/tplink-4mlzma)
+    $(Device/tplink-16mlzma)
     BOARDNAME := TL-WR841N-v9
     DEVICE_PROFILE := TLWR841
     TPLINK_HWID := 0x08410009
@@ -1026,7 +1048,6 @@ ap132_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,1408k(kernel),6
 ap135_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,14528k(rootfs),1472k(kernel),64k(art)ro,16000k@0x50000(firmware)
 ap136_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,6336k(rootfs),1408k(kernel),64k(mib0),64k(art)ro,7744k@0x50000(firmware)
 letv_mtdlayout=mtdparts=spi0.0:256k(u-boot),64k(u-boot-env),14528k(rootfs),1472k(kernel),64k(art),16000k@0x50000(firmware)
-csac_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,14528k(rootfs),1472k(kernel),64k(art)ro,16000k@0x50000(firmware)
 bxu2000n2_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,1408k(kernel),8448k(rootfs),6016k(user),64k(cfg),64k(oem),64k(art)ro
 cameo_ap81_mtdlayout=mtdparts=spi0.0:128k(u-boot)ro,64k(config)ro,3840k(firmware),64k(art)ro
 cameo_ap91_mtdlayout=mtdparts=spi0.0:192k(u-boot)ro,64k(nvram)ro,3712k(firmware),64k(mac)ro,64k(art)ro
@@ -1950,7 +1971,6 @@ $(eval $(call SingleProfile,AthLzma,64k,AP135,ap135-020,AP135-020,ttyS0,115200,$
 $(eval $(call SingleProfile,AthLzma,64k,AP136_010,ap136-010,AP136-010,ttyS0,115200,$$(ap136_mtdlayout),RKuImage))
 $(eval $(call SingleProfile,AthLzma,64k,AP136_020,ap136-020,AP136-020,ttyS0,115200,$$(ap136_mtdlayout),RKuImage))
 $(eval $(call SingleProfile,AthLzma,64k,LETV,letv,LETV,ttyS0,115200,$$(letv_mtdlayout),RKuImage))
-$(eval $(call SingleProfile,AthLzma,64k,CSAC,csac,CSAC,ttyS0,115200,$$(csac_mtdlayout),RKuImage))
 $(eval $(call SingleProfile,AthLzma,64k,BXU2000N2,bxu2000n-2-a1,BXU2000n-2-A1,ttyS0,115200,$$(bxu2000n2_mtdlayout),RKuImage))
 $(eval $(call SingleProfile,AthLzma,64k,CAP4200AG,cap4200ag,CAP4200AG,ttyS0,115200,$$(cap4200ag_mtdlayout),KRuImage))
 $(eval $(call SingleProfile,AthLzma,64k,DB120,db120,DB120,ttyS0,115200,$$(db120_mtdlayout),RKuImage))
@@ -2077,7 +2097,7 @@ $(eval $(call SingleProfile,TPLINK,64kraw,TLWR740NV3,tl-wr740n-v3,TL-WR741ND,tty
 $(eval $(call SingleProfile,TPLINK,64kraw,TLWR743NV1,tl-wr743nd-v1,TL-WR741ND,ttyS0,115200,0x07430001,1,4M))
 $(eval $(call SingleProfile,TPLINK,64kraw,TLWR841NV3,tl-wr841nd-v3,TL-WR941ND,ttyS0,115200,0x08410003,3,4M))
 $(eval $(call SingleProfile,TPLINK,64kraw,TLWR841NV5,tl-wr841nd-v5,TL-WR741ND,ttyS0,115200,0x08410005,1,4M))
-$(eval $(call SingleProfile,TPLINK,64kraw,TLWR841NV7,tl-wr841nd-v7,TL-WR841N-v7,ttyS0,115200,0x08410007,1,4M))
+$(eval $(call SingleProfile,TPLINK,64kraw,TLWR841NV7,tl-wr841nd-v7,TL-WR841N-v7,ttyS0,115200,0x08410007,1,16M))
 $(eval $(call SingleProfile,TPLINK,64kraw,TLWR842V1,tl-wr842n-v1,TL-MR3420,ttyS0,115200,0x08420001,1,8M))
 $(eval $(call SingleProfile,TPLINK,64kraw,TLWR941NV2,tl-wr941nd-v2,TL-WR941ND,ttyS0,115200,0x09410002,2,4M))
 $(eval $(call SingleProfile,TPLINK,64kraw,TLWR941NV3,tl-wr941nd-v3,TL-WR941ND,ttyS0,115200,0x09410002,2,4M))

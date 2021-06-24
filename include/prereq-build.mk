@@ -145,7 +145,7 @@ $(eval $(call SetupHostCommand,svn,Please install the Subversion client, \
 	svn --version | grep Subversion))
 
 $(eval $(call SetupHostCommand,git,Please install Git (git-core) >= 1.6.5, \
-	git clone 2>&1 | grep -- --recursive))
+	git --exec-path | xargs -I % -- grep -q -- --recursive %/git-submodule))
 
 $(eval $(call SetupHostCommand,file,Please install the 'file' package, \
 	file --version 2>&1 | grep file))
@@ -153,6 +153,11 @@ $(eval $(call SetupHostCommand,file,Please install the 'file' package, \
 $(eval $(call SetupHostCommand,openssl,Please install the 'openssl' utility, \
 	openssl version | grep OpenSSL))
 
+$(STAGING_DIR_HOST)/bin/mkhash: $(SCRIPT_DIR)/mkhash.c
+	mkdir -p $(dir $@)
+	$(CC) -O2 -I$(TOPDIR)/tools/include -o $@ $<
+
+prereq: $(STAGING_DIR_HOST)/bin/mkhash
 
 # Install ldconfig stub
 $(eval $(call TestHostCommand,ldconfig-stub,Failed to install stub, \

@@ -388,6 +388,15 @@ ramips_board_detect() {
 	*"XDX RN502J")
 		name="xdxrn502j"
 		;;
+	*"Xiaomi Mi Router AC2100")
+		name="mi-router-ac2100"
+		;;
+	*"Xiaomi Redmi Router AC2100")
+		name="redmi-router-ac2100"
+		;;
+	*"XiaoYu XY-C5")
+		name="xiaoyu-xy-c5"
+		;;
 	*"HG255D")
 		name="hg255d"
 		;;
@@ -402,6 +411,9 @@ ramips_board_detect() {
 		;;
 	*"Xiaomi MiWiFi Mini")
 		name="xiaomi-miwifi-mini"
+		;;
+	*"MiWiFi Nano")
+		name="miwifi-nano"
 		;;
 	*"Sercomm NA930")
 		name="na930"
@@ -427,11 +439,17 @@ ramips_board_detect() {
 	*"Daishuyun")
 		name="daishuyun"
 		;;
-	*"GHL-R-001")
-		name="ghl"
+	*"GHL-R-001-E")
+		name="ghl-r-001-e"
+		;;
+	*"GHL-R-001-F")
+		name="ghl-r-001-f"
 		;;
 	*"JDCloud-1")
 		name="jdcloud-1"
+		;;
+	*"K2P")
+		name="k2p"
 		;;
 	*"Mediatek MT7621 evaluation board")
 		name="mt7621"
@@ -457,6 +475,24 @@ ramips_board_detect() {
 	*"Phicomm PSG1218")
 		name="psg1218"
 		;;
+	*"MERCURY MAC1200R v2")
+		name="mac1200rv2"
+		;;
+	*"TPLINK WDR5620 v1")
+		name="wdr5620v1"
+		;;
+	*"TPLINK WDR5640 v1")
+		name="wdr5640v1"
+		;;
+	*"360 P2")
+		name="360p2"
+		;;
+	*"HC5611")
+		name="hc5611"
+		;;
+	*"HC5661A")
+		name="hc5661a"
+		;;
 	*"HiWiFi HC5962")
 		name="hc5962"
 		;;
@@ -466,8 +502,14 @@ ramips_board_detect() {
 	*"Newifi-D2")
 		name="newifi-d2"
 		;;
+	*"JCG-Y2")
+		name="jcg-y2"
+		;;
 	*"ZBT-WE1326")
 		name="zbt-we1326"
+		;;
+	*"ZBT-WE1226")
+		name="zbt-we1226"
 		;;
 	*)
 		name="generic"

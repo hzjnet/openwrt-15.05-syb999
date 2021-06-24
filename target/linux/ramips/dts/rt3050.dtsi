@@ -28,8 +28,8 @@
 		#address-cells = <1>;
 		#size-cells = <1>;
 
-		sysc@0 {
-			compatible = "ralink,rt3050-sysc";
+		sysc: sysc@0 {
+			compatible = "ralink,rt3050-sysc", "syscon";
 			reg = <0x0 0x100>;
 		};
 
@@ -144,6 +144,22 @@
 			status = "disabled";
 		};
 
+		i2c@900 {
+			compatible = "ralink,rt2880-i2c";
+			reg = <0x900 0x100>;
+
+			resets = <&rstctrl 16>;
+			reset-names = "i2c";
+
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			status = "disabled";
+
+			pinctrl-names = "default";
+			pinctrl-0 = <&i2c_pins>;
+		};
+
 		spi@b00 {
 			compatible = "ralink,rt3050-spi", "ralink,rt2880-spi";
 			reg = <0xb00 0x100>;
@@ -191,12 +207,27 @@
 			};
 		};
 
+		i2c_pins: i2c {
+			i2c {
+				ralink,group = "i2c";
+				ralink,function = "i2c";
+			};
+		};
+
 		spi_pins: spi {
 			spi {
 				ralink,group = "spi";
 				ralink,function = "spi";
 			};
 		};
+
+		rgmii_pins: rgmii {
+			rgmii {
+				ralink,group = "rgmii";
+				ralink,function = "rgmii";
+			};
+		};
+
 		uartlite_pins: uartlite {
 			uart {
 				ralink,group = "uartlite";
@@ -210,20 +241,38 @@
 		#reset-cells = <1>;
 	};
 
-	ethernet@10100000 {
+	clkctrl: clkctrl {
+		compatible = "ralink,rt2880-clock";
+		#clock-cells = <1>;
+	};
+
+	usbphy: usbphy {
+		compatible = "ralink,rt3050-usbphy";
+		#phy-cells = <0>;
+
+		ralink,sysctl = <&sysc>;
+		resets = <&rstctrl 22>;
+		reset-names = "host";
+		clocks = <&clkctrl 18>;
+		clock-names = "host";
+	};
+
+	ethernet: ethernet@10100000 {
 		compatible = "ralink,rt3050-eth";
-		reg = <0x10100000 10000>;
+		reg = <0x10100000 0x10000>;
 
 		resets = <&rstctrl 21>;
 		reset-names = "fe";
 
 		interrupt-parent = <&cpuintc>;
 		interrupts = <5>;
+
+		mediatek,switch = <&esw>;
 	};
 
-	esw@10110000 {
+	esw: esw@10110000 {
 		compatible = "ralink,rt3050-esw";
-		reg = <0x10110000 8000>;
+		reg = <0x10110000 0x8000>;
 
 		resets = <&rstctrl 23>;
 		reset-names = "esw";
@@ -232,9 +281,9 @@
 		interrupts = <17>;
 	};
 
-	wmac@10180000 {
+	wmac: wmac@10180000 {
 		compatible = "ralink,rt3050-wmac", "ralink,rt2880-wmac";
-		reg = <0x10180000 40000>;
+		reg = <0x10180000 0x40000>;
 
 		interrupt-parent = <&cpuintc>;
 		interrupts = <6>;
@@ -242,9 +291,11 @@
 		ralink,eeprom = "soc_wmac.eeprom";
 	};
 
-	otg@101c0000 {
+	otg: otg@101c0000 {
+		#address-cells = <1>;
+		#size-cells = <0>;
 		compatible = "ralink,rt3050-otg", "snps,dwc2";
-		reg = <0x101c0000 40000>;
+		reg = <0x101c0000 0x40000>;
 
 		interrupt-parent = <&intc>;
 		interrupts = <18>;
@@ -253,5 +304,10 @@
 		reset-names = "otg";
 
 		status = "disabled";
+
+		otg_port1: port@1 {
+			reg = <1>;
+			#trigger-source-cells = <0>;
+		};
 	};
 };

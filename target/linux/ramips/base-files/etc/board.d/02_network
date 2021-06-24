@@ -126,6 +126,12 @@ ramips_setup_interfaces()
 		ucidef_add_switch_vlan "switch0" "1" "0 1 2 3 9t"
 		ucidef_add_switch_vlan "switch0" "2" "4 9t"
 		;;
+		
+	hc5611)
+		ucidef_set_interfaces_lan_wan "eth0.1"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "3 6t"
+		;;
 
 	3g-6200n | \
 	ai-br100 | \
@@ -136,6 +142,7 @@ ramips_setup_interfaces()
 	firewrt | \
 	pbr-m1 | \
 	hlk-rm04 | \
+	k2p|\
 	mt7621 | \
 	mt7628 | \
 	mzk-w300nh2 | \
@@ -145,12 +152,12 @@ ramips_setup_interfaces()
 	wsr-600 | \
 	wsr-1166 | \
 	wt1520 | \
-	xiaomi-miwifi-mini |\
-	y1|\
+	hc5661a | \
+	miwifi-nano |\
 	youku-yk1|\
 	psg1208|\
 	psg1218|\
-	hc5962|\
+	jcg-y2|\
 	zbt-we1326|\
 	zbt-wg2626)
 		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
@@ -159,10 +166,56 @@ ramips_setup_interfaces()
 		ucidef_add_switch_vlan "switch0" "2" "4 6t"
 		;;
 
+	y1|\
+	xiaomi-miwifi-mini)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "0 1 6t"
+		ucidef_add_switch_vlan "switch0" "2" "4 6t"
+		;;
+
+	zbt-we1226)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "0 1 6t"
+		ucidef_add_switch_vlan "switch0" "2" "4 6t"
+		;;
+
+	mac1200rv2|\
+	wdr5620v1)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "1 2 3 4 6t"
+		ucidef_add_switch_vlan "switch0" "2" "0 6t"
+		;;
+
+	360p2|\
+	wdr5640v1)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "1 2 3 4 6t"
+		ucidef_add_switch_vlan "switch0" "2" "0 6t"
+		;;
+
+	mi-router-ac2100|\
+	redmi-router-ac2100)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "2 3 4 6t"
+		ucidef_add_switch_vlan "switch0" "2" "0 6t"
+		;;
+
+	hc5962)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "1 2 3 6t"
+		ucidef_add_switch_vlan "switch0" "2" "4 6t"
+		;;
+
 	newifi-d2)
 		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
 		ucidef_add_switch "switch0" "1" "1"
-		ucidef_add_switch_vlan "switch0" "1" "0 1 2 6t"
+		ucidef_add_switch_vlan "switch0" "1" "0 1 2 3 6t"
 		ucidef_add_switch_vlan "switch0" "2" "4 6t"
 		;;
 
@@ -187,6 +240,7 @@ ramips_setup_interfaces()
 	f5d8235-v2 | \
 	hg255d | \
 	rt-n14u | \
+	tplink,c20-v4|\
 	fwr200-v2 | \
 	wrtnode | \
 	wt3020 | \
@@ -265,7 +319,7 @@ ramips_setup_interfaces()
 	newifi-d1)
 		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
 		ucidef_add_switch "switch0" "1" "1"
-		ucidef_add_switch_vlan "switch0" "1" "2 1 6t"
+		ucidef_add_switch_vlan "switch0" "1" "1 2 6t"
 		ucidef_add_switch_vlan "switch0" "2" "4 6t"
 		;;
 
@@ -276,7 +330,8 @@ ramips_setup_interfaces()
 		ucidef_add_switch_vlan "switch0" "2" "2 6t"
 		;;
 
-	ghl)
+	ghl-r-001-e|\
+	ghl-r-001-f)
 		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
 		ucidef_add_switch "switch0" "1" "1"
 		ucidef_add_switch_vlan "switch0" "1" "0 1 2 6t"
@@ -288,6 +343,13 @@ ramips_setup_interfaces()
 		ucidef_add_switch "switch0" "1" "1"
 		ucidef_add_switch_vlan "switch0" "1" "1 2 6t"
 		ucidef_add_switch_vlan "switch0" "2" "0 6t"
+		;;
+
+	xiaoyu-xy-c5)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "0 1 2 3 6t"
+		ucidef_add_switch_vlan "switch0" "2" "4 6t"
 		;;
 
 	d105 | \
@@ -375,18 +437,24 @@ ramips_setup_macs()
 	y1s)
 		lan_mac=$(cat /sys/class/net/eth0/address)
 		lan_mac=$(macaddr_setbit_la "$lan_mac")
-		wan_mac=$(macaddr_add "$lan_mac" 1)
+		wan_mac=$(macaddr_add "$lan_mac" -1)
+		;;
+
+	xiaomi-miwifi-mini)
+		lan_mac=$(cat /sys/class/net/eth0/address)
+		wan_mac=$(macaddr_add "$lan_mac" -1)
 		;;
 
 	fwr200-v2 | \
 	daishuyun)
 		lan_mac=$(mtd_get_mac_binary factory 4)
-		wan_mac=$(macaddr_add "$lan_mac" 1)
+		wan_mac=$(macaddr_add "$lan_mac" -1)
 		;;
 
-	ghl)
+	ghl-r-001-e|\
+	ghl-r-001-f)
 		lan_mac=$(mtd_get_mac_binary factory 57344)
-		wan_mac=$(macaddr_add "$lan_mac" 1)
+		wan_mac=$(macaddr_add "$lan_mac" -1)
 		;;
 
 	jdcloud-1)
@@ -402,13 +470,19 @@ ramips_setup_macs()
 
 	newifi-d1)
 		lan_mac=$(cat /sys/class/net/eth0/address)
-		wan_mac=$(macaddr_add "$lan_mac" 2)
+		wan_mac=$(macaddr_add "$lan_mac" -1)
 		;;
 
-	hc5962)
+	hc5611 | \
+	hc5661a)
 		lan_mac=`mtd_get_mac_ascii bdinfo "Vfac_mac "`
 		[ -n "$lan_mac" ] || lan_mac=$(cat /sys/class/net/eth0/address)
 		wan_mac=$(macaddr_add "$lan_mac" 1)
+		;;
+
+	hc5962)
+		lan_mac=$(mtd_get_mac_binary factory 57344)
+		wan_mac=$(macaddr_add "$lan_mac" -1)
 		;;
 
 	ht-tm02)
@@ -463,7 +537,7 @@ ramips_setup_macs()
 		;;
 	*)
 		lan_mac=$(cat /sys/class/net/eth0/address)
-		wan_mac=$(macaddr_add "$lan_mac" 1)
+		wan_mac=$(macaddr_add "$lan_mac" -1)
 		;;
 
 	esac

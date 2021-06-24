@@ -56,6 +56,8 @@ platform_check_image() {
 	freestation5 | \
 	firewrt |\
 	pbr-m1 |\
+	hc5661a | \
+	hc5611 | \
 	hg255d | \
 	hlk-rm04 | \
 	ht-tm02 | \
@@ -126,19 +128,29 @@ platform_check_image() {
 	x5 |\
 	x8 |\
 	xiaomi-miwifi-mini |\
+	xiaoyu-xy-c5 |\
+	miwifi-nano |\
 	y1 |\
 	y1s |\
 	daishuyun |\
 	zbt-wa05 |\
+	zbt-we1226 |\
 	zbt-wg2626 |\
 	zte-q7 |\
 	hc5962 |\
 	newifi-d1 |\
 	newifi-d2 |\
+	jcg-y2 |\
+	k2p|\
 	zbt-we1326 |\
 	psg1208 |\
 	psg1218 |\
-	ghl |\
+	mac1200rv2 |\
+	wdr5620v1 |\
+	wdr5640v1 |\
+	360p2 |\
+	ghl-r-001-e |\
+	ghl-r-001-f |\
 	jdcloud-1 |\
 	youku-yk1)
 		[ "$magic" != "27051956" ] && {
@@ -185,6 +197,13 @@ platform_check_image() {
 		}
 		return 0
 		;;
+	tplink,c20-v4)
+		[ "$magic" != "03000000" ] && {
+			echo "Invalid image type."
+			return 1
+		}
+		return 0
+		;;
 	esac
 
 	echo "Sysupgrade is not yet supported on $board."
@@ -195,6 +214,8 @@ platform_do_upgrade() {
 	local board=$(ramips_board_name)
 
 	case "$board" in
+	mi-router-ac2100|\
+	redmi-router-ac2100|\
 	hc5962)
 		nand_do_upgrade "$ARGV"
 		;;

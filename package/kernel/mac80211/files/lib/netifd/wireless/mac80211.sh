@@ -105,6 +105,9 @@ mac80211_hostapd_setup_base() {
 	json_get_vars noscan ht_coex
 	json_get_values ht_capab_list ht_capab tx_burst
 
+	set_default noscan 0
+
+	[ "$noscan" -gt 0 ] && hostapd_noscan=1
 	[ "$tx_burst" = 0 ] && tx_burst=
 
 	ieee80211n=1
@@ -316,7 +319,7 @@ mac80211_hostapd_setup_base() {
 	cat >> "$hostapd_conf_file" <<EOF
 ${channel:+channel=$channel}
 ${channel_list:+chanlist=$channel_list}
-${noscan:+noscan=$noscan}
+${hostapd_noscan:+noscan=1}
 ${tx_burst:+tx_queue_data2_burst=$tx_burst}
 $base_cfg
 
@@ -333,7 +336,7 @@ mac80211_hostapd_setup_bss() {
 	hostapd_cfg=
 	append hostapd_cfg "$type=$ifname" "$N"
 
-	hostapd_set_bss_options hostapd_cfg "$vif" || return 1
+	hostapd_set_bss_options hostapd_cfg "$phy" "$vif" || return 1
 	json_get_vars wds dtim_period max_listen_int start_disabled
 
 	set_default wds 0
@@ -354,7 +357,7 @@ mac80211_get_addr() {
 	local phy="$1"
 	local idx="$(($2 + 1))"
 
-	head -n $(($macidx + 1)) /sys/class/ieee80211/${phy}/addresses | tail -n1
+	head -n $idx /sys/class/ieee80211/${phy}/addresses | tail -n1
 }
 
 mac80211_generate_mac() {
@@ -367,7 +370,7 @@ mac80211_generate_mac() {
 	[ "$mask" = "00:00:00:00:00:00" ] && {
 		mask="ff:ff:ff:ff:ff:ff";
 
-		[ "$(wc -l < /sys/class/ieee80211/${phy}/addresses)" -gt 1 ] && {
+		[ "$(wc -l < /sys/class/ieee80211/${phy}/addresses)" -gt $id ] && {
 			addr="$(mac80211_get_addr "$phy" "$id")"
 			[ -n "$addr" ] && {
 				echo "$addr"
@@ -387,7 +390,7 @@ mac80211_generate_mac() {
 	[ "$((0x$mask1))" -gt 0 ] && {
 		b1="0x$1"
 		[ "$id" -gt 0 ] && \
-			b1=$(($b1 ^ ((($id - 1) << 2) | 0x2)))
+			b1=$(($b1 ^ ((($id - !($b1 & 2)) << 2)) | 0x2))
 		printf "%02x:%s:%s:%s:%s:%s" $b1 $2 $3 $4 $5 $6
 		return
 	}
@@ -407,11 +410,8 @@ mac80211_generate_mac() {
 find_phy() {
 	[ -n "$phy" -a -d /sys/class/ieee80211/$phy ] && return 0
 	[ -n "$path" ] && {
-		for phy in $(ls /sys/class/ieee80211 2>/dev/null); do
-			case "$(readlink -f /sys/class/ieee80211/$phy/device)" in
-				*$path) return 0;;
-			esac
-		done
+		phy="$(iwinfo nl80211 phyname "path=$path")"
+		[ -n "$phy" ] && return 0
 	}
 	[ -n "$macaddr" ] && {
 		for phy in $(ls /sys/class/ieee80211 2>/dev/null); do
@@ -740,9 +740,16 @@ mac80211_interface_cleanup() {
 	local phy="$1"
 
 	for wdev in $(list_phy_interfaces "$phy"); do
+		local wdev_phy="$(readlink /sys/class/net/${wdev}/phy80211)"
+		wdev_phy="$(basename "$wdev_phy")"
+		[ -n "$wdev_phy" -a "$wdev_phy" != "$phy" ] && continue
 		ip link set dev "$wdev" down 2>/dev/null
 		iw dev "$wdev" del
 	done
+}
+
+mac80211_set_noscan() {
+	hostapd_noscan=1
 }
 
 drv_mac80211_cleanup() {
@@ -791,10 +798,13 @@ drv_mac80211_setup() {
 		done
 	}
 
-	set_default rxantenna all
-	set_default txantenna all
+	set_default rxantenna 0xffffffff
+	set_default txantenna 0xffffffff
 	set_default distance 0
 	set_default antenna_gain 0
+
+	[ "$txantenna" = "all" ] && txantenna=0xffffffff
+	[ "$rxantenna" = "all" ] && rxantenna=0xffffffff
 
 	iw phy "$phy" set antenna $txantenna $rxantenna >/dev/null 2>&1
 	iw phy "$phy" set antenna_gain $antenna_gain
@@ -805,9 +815,12 @@ drv_mac80211_setup() {
 
 	has_ap=
 	hostapd_ctrl=
+	hostapd_noscan=
 	for_each_interface "ap" mac80211_check_ap
 
 	rm -f "$hostapd_conf_file"
+
+	for_each_interface "sta adhoc mesh" mac80211_set_noscan
 	[ -n "$has_ap" ] && mac80211_hostapd_setup_base "$phy"
 
 	for_each_interface "sta adhoc mesh monitor" mac80211_prepare_vif

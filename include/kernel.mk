@@ -76,6 +76,32 @@ else
   LINUX_KARCH := $(ARCH)
 endif
 
+PKG_EXTMOD_SUBDIRS ?= .
+
+define populate_module_symvers
+	cat /dev/null > $(PKG_INFO_DIR)/$(PKG_NAME).symvers; \
+	for subdir in $(PKG_EXTMOD_SUBDIRS); do \
+		cat $(PKG_INFO_DIR)/*.symvers 2>/dev/null > $(PKG_BUILD_DIR)/$$$$subdir/Module.symvers; \
+	done
+endef
+
+define collect_module_symvers
+	for subdir in $(PKG_EXTMOD_SUBDIRS); do \
+		grep -F $(PKG_BUILD_DIR) $(PKG_BUILD_DIR)/$$$$subdir/Module.symvers >> $(PKG_BUILD_DIR)/Module.symvers.tmp; \
+	done; \
+	sort -u $(PKG_BUILD_DIR)/Module.symvers.tmp > $(PKG_BUILD_DIR)/Module.symvers; \
+	mv $(PKG_BUILD_DIR)/Module.symvers $(PKG_INFO_DIR)/$(PKG_NAME).symvers
+endef
+
+define KernelPackage/hooks
+  ifneq ($(PKG_NAME),kernel)
+    Hooks/Compile/Pre += populate_module_symvers
+    Hooks/Compile/Post += collect_module_symvers
+  endif
+  define KernelPackage/hooks
+  endef
+endef
+
 define KernelPackage/Defaults
   FILES:=
   AUTOLOAD:=
@@ -85,15 +111,16 @@ define ModuleAutoLoad
 	$(SH_FUNC) \
 	export modules=; \
 	probe_module() { \
-		mods="$$$$$$$$1"; \
-		boot="$$$$$$$$2"; \
+		local mods="$$$$$$$$1"; \
+		local boot="$$$$$$$$2"; \
+		local mod; \
 		shift 2; \
 		for mod in $$$$$$$$mods; do \
 			mkdir -p $(2)/etc/modules.d; \
 			echo "$$$$$$$$mod" >> $(2)/etc/modules.d/$(1); \
 		done; \
 		if [ -e $(2)/etc/modules.d/$(1) ]; then \
-			if [ "$$$$$$$$boot" = "1" ]; then \
+			if [ "$$$$$$$$boot" = "1" -a ! -e $(2)/etc/modules-boot.d/$(1) ]; then \
 				mkdir -p $(2)/etc/modules-boot.d; \
 				ln -s ../modules.d/$(1) $(2)/etc/modules-boot.d/; \
 			fi; \
@@ -101,16 +128,17 @@ define ModuleAutoLoad
 		fi; \
 	}; \
 	add_module() { \
-		priority="$$$$$$$$1"; \
-		mods="$$$$$$$$2"; \
-		boot="$$$$$$$$3"; \
+		local priority="$$$$$$$$1"; \
+		local mods="$$$$$$$$2"; \
+		local boot="$$$$$$$$3"; \
+		local mod; \
 		shift 3; \
 		for mod in $$$$$$$$mods; do \
 			mkdir -p $(2)/etc/modules.d; \
 			echo "$$$$$$$$mod" >> $(2)/etc/modules.d/$$$$$$$$priority-$(1); \
 		done; \
 		if [ -e $(2)/etc/modules.d/$$$$$$$$priority-$(1) ]; then \
-			if [ "$$$$$$$$boot" = "1" ]; then \
+			if [ "$$$$$$$$boot" = "1" -a ! -e $(2)/etc/modules-boot.d/$$$$$$$$priority-$(1) ]; then \
 				mkdir -p $(2)/etc/modules-boot.d; \
 				ln -s ../modules.d/$$$$$$$$priority-$(1) $(2)/etc/modules-boot.d/; \
 			fi; \
@@ -119,6 +147,7 @@ define ModuleAutoLoad
 	}; \
 	$(3) \
 	if [ -n "$$$$$$$$modules" ]; then \
+		modules="$$$$$$$$(echo "$$$$$$$$modules" | tr ' ' '\n' | sort | uniq | paste -s -d' ')"; \
 		mkdir -p $(2)/etc/modules.d; \
 		mkdir -p $(2)/CONTROL; \
 		echo "#!/bin/sh" > $(2)/CONTROL/postinst-pkg; \
@@ -176,6 +205,7 @@ $(call KernelPackage/$(1)/config)
   endif
 
   $(call KernelPackage/depends)
+  $(call KernelPackage/hooks)
 
   ifneq ($(if $(filter-out %=y %=n %=m,$(KCONFIG)),$(filter m y,$(foreach c,$(filter-out %=y %=n %=m,$(KCONFIG)),$($(c)))),.),)
     ifneq ($(if $(SDK),$(filter-out $(LINUX_DIR)/%.ko,$(FILES)),$(strip $(FILES))),)
@@ -213,6 +243,7 @@ $(call KernelPackage/$(1)/config)
   $$(eval $$(call BuildPackage,kmod-$(1)))
 
   $$(IPKG_kmod-$(1)): $$(wildcard $$(FILES))
+
 endef
 
 version_filter=$(if $(findstring @,$(1)),$(shell $(SCRIPT_DIR)/metadata.pl version_filter $(KERNEL_PATCHVER) $(1)),$(1))

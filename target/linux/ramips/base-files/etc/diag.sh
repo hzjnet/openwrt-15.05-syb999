@@ -101,6 +101,12 @@ get_status_led() {
 	m4)
 		status_led="m4:blue:status"
 		;;
+	hc5611)
+		status_led="$boardname:blue:system"
+		;;
+	hc5661a)
+		status_led="hc5661a:blue:system"
+		;;
 	mlw221|\
 	mlwg2)
 		status_led="kingston:blue:system"
@@ -265,13 +271,25 @@ get_status_led() {
 		status_led="psg1218:blue:status"
 		;;
 	jdcloud-1)
-		status_led="jdcloud:blue:sysb"
+		status_led="jdcloud:green:sysg"
+		;;
+	k2p)
+		status_led="k2p:blue:status"
+		;;
+	xiaoyu-xy-c5)
+		status_led="xiaoyu-xy-c5:green:system"
+		;;
+	zbt-we1226)
+		status_led="zbt-we1226:green:wlan"
 		;;
 	zbt-wg2626)
 		status_led="zbt-wg2626:green:status"
 		;;
 	zte-q7)
 		status_led="zte:red:status"
+		;;
+	tplink,c20-v4)
+		status_led="$boardname:green:power"
 		;;
 	esac
 }

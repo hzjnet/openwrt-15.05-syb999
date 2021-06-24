@@ -86,10 +86,6 @@
 		mtd-mac-address = <&factory 0xe000>;
 	};
 
-	xhci@1e1c0000 {
-		status = "okay";
-	};
-
 	gpio-keys-polled {
 		compatible = "gpio-keys-polled";
 		#address-cells = <1>;
@@ -138,6 +134,12 @@
 			gpios = <&gpio0 16 1>;
 		};
 
+		usb {
+			label = "newifi-d2:blue:usb";
+			gpios = <&gpio0 10 1>;
+			trigger-sources = <&xhci_ehci_port1>, <&ehci_port2>;
+			linux,default-trigger = "usbport";
+		};
 	};
 
 	pinctrl {
@@ -145,11 +147,6 @@
 			gpio {
 				ralink,group = "i2c", "jtag", "uart2", "uart3";
 				ralink,function = "gpio";
-			};
-
-			pa {
-				ralink,group = "pa";
-				ralink,function = "pa";
 			};
 		};
 	};

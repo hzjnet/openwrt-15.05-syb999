@@ -15,39 +15,70 @@ port = s:taboption("basic", Value, "port", translate("Port"))
 port.datatype = "range(1,65535)"
 port.default = "1194"
 
+dev = s:taboption("basic", Value, "dev", translate("device node"))
+dev.datatype = "string"
+dev.default = "tun"
+dev.rmempty = false
+dev.description = translate("use tun/tap device node(default tun)")
+
+tun_ipv6 = s:taboption("basic",Flag,"tun_ipv6", translate("tun_ipv6"))
+tun_ipv6:depends({dev="tun"})
+tun_ipv6.description = translate("Make tun device IPv6 capable")
+
 ddns = s:taboption("basic", Value, "ddns", translate("WAN DDNS or IP"))
 ddns.datatype = "string"
 ddns.default = "exmple.com"
 ddns.rmempty = false
+
+max_clients = s:taboption("basic", Value, "max_clients", translate("max_clients"))
+max_clients.datatype = "range(1,999)"
+max_clients.default = "88"
+max_clients.rmempty = false
+max_clients.description = translate("最大客户端数")
 
 localnet = s:taboption("basic", Value, "server", translate("Client Network"))
 localnet.datatype = "string"
 localnet.description = translate("VPN Client Network IP with subnet")
 localnet.default = "10.9.9.0 255.255.255.0"
 
-
 proto = s:taboption("basic",Value,"proto", translate("proto"))
 proto.datatype = "string"
 proto.default ="tcp"
+proto.rmempty = false
+proto.description = translate("use udp/tcp proto")
 
 comp_lzo = s:taboption("basic",Value,"comp_lzo", translate("comp_lzo"))
 comp_lzo.datatype = "string"
 comp_lzo.default="adaptive"
 comp_lzo.description = translate("yes,no,adaptive")
 
-
 auth_user_pass_verify = s:taboption("basic",Value,"auth_user_pass_verify", translate("帐号密码验证"))
 auth_user_pass_verify.datatype = "string"
 auth_user_pass_verify.default ="/etc/openvpn/server/checkpsw.sh via-env"
+auth_user_pass_verify.rmempty = true
 auth_user_pass_verify.description = translate("默认设置:/etc/openvpn/server/checkpsw.sh via-env,留空禁用")
 
 script_security = s:taboption("basic",Value,"script_security", translate("script_security配合帐号密码验证使用"))
 script_security.datatype = "range(1,3)"
-script_security.default ="3"
+script_security.default = "3"
+script_security.rmempty = true
 script_security.description = translate("默认设置:3,留空禁用")
 
+persist_key = s:taboption("basic",Flag,"persist_key", translate("persist_key"))
+persist_key.description = translate("重新启动vpn，不重新读取key")
+
+persist_tun = s:taboption("basic",Flag,"persist_tun", translate("persist_tun"))
+persist_tun.description = translate("重新启动vpn,仍保持tun或tap设备的连接")
+
+client_to_client = s:taboption("basic",Flag,"client_to_client", translate("client_to_client"))
+client_to_client.description = translate("允许客户端相互访问")
+
 duplicate_cn = s:taboption("basic",Flag,"duplicate_cn", translate("duplicate_cn"))
+duplicate_cn.description = translate("Allow multiple clients to access at the same time")
+
 username_as_common_name = s:taboption("basic",Flag,"username_as_common_name", translate("username_as_common_name"))
+username_as_common_name.description = translate("The same account can be used when multiple users log in at the same time")
+
 client_cert_not_required = s:taboption("basic",Flag,"client_cert_not_required", translate("client_cert_not_required"))
 client_cert_not_required.description = translate("打开后客户端则不需要cert和key,不打开则需要cert和key以及帐号密码双重验证")
 
@@ -55,7 +86,6 @@ list = s:taboption("basic", DynamicList, "push")
 list.title = translate("Client Settings")
 list.datatype = "string"
 list.description = translate("Set route 192.168.1.0 255.255.255.0 and dhcp-option DNS 192.168.1.1 base on your router")
-
 
 local o
 o = s:taboption("basic", Button,"certificate",translate("OpenVPN Client config file"))

@@ -1,4 +1,5 @@
 #!/bin/sh
+
 append DRIVERS "mac80211"
 
 lookup_phy() {
@@ -9,12 +10,8 @@ lookup_phy() {
 	local devpath
 	config_get devpath "$device" path
 	[ -n "$devpath" ] && {
-		for _phy in /sys/devices/$devpath/ieee80211/phy*; do
-			[ -e "$_phy" ] && {
-				phy="${_phy##*/}"
-				return
-			}
-		done
+		phy="$(iwinfo nl80211 phyname "path=$devpath")"
+		[ -n "$phy" ] && return
 	}
 
 	local macaddr="$(config_get "$device" macaddr | tr 'A-Z' 'a-z')"
@@ -95,18 +92,16 @@ detect_mac80211() {
 			htmode="VHT80"
 		}
 
+		iw phy "$dev" info | grep -q '\* 5.... MHz \[' && {
+			mode_band="ad"
+			channel=$(iw phy "$dev" info | grep '\* 5.... MHz \[' | grep '(disabled)' -v -m 1 | sed 's/[^[]*\[\|\|\].*//g')
+			iw phy "$dev" info | grep -q 'Capabilities:' && htmode="HT20"
+		}
+
 		[ -n $htmode ] && append ht_capab "	option htmode	$htmode" "$N"
 
-		if [ -x /usr/bin/readlink -a -h /sys/class/ieee80211/${dev} ]; then
-			path="$(readlink -f /sys/class/ieee80211/${dev}/device)"
-		else
-			path=""
-		fi
+		path="$(iwinfo nl80211 path "$dev")"
 		if [ -n "$path" ]; then
-			path="${path##/sys/devices/}"
-			case "$path" in
-				platform*/pci*) path="${path##platform/}";;
-			esac
 			dev_id="	option path	'$path'"
 		else
 			dev_id="	option macaddr	$(cat /sys/class/ieee80211/${dev}/macaddress)"
@@ -139,11 +134,6 @@ config wifi-iface
 	option encryption none
 	option disassoc_low_ack 0
 	option isolate 0
-	option signal_connect -95
-	option signal_stay -100
-	option signal_strikes 3
-	option signal_poll_time 5
-	option signal_drop_reason 3
 
 EOF
 	devidx=$(($devidx + 1))

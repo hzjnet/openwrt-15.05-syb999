@@ -80,23 +80,19 @@
 	};
 
 	ethernet@1e100000 {
-		mtd-mac-address = <&factory 0xe006>;
+		mtd-mac-address = <&factory 0xe000>;
 	};	
-
-	xhci@1e1c0000 {
-		status = "okay";
-	};
 
 	gpio-leds {
 		compatible = "gpio-leds";
 
-		system {
-			label = "hc5962:white:system";
+		wifi {
+			label = "hc5962:white:wifi";
 			gpios = <&gpio0 6 1>;
 		};	
 		
-		wifi {
-			label = "hc5962:red:wifi";
+		system {
+			label = "hc5962:red:system";
 			gpios = <&gpio0 7 1>;
 		};
 	};

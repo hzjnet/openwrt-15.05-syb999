@@ -8,11 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ath10k-firmware
-PKG_VERSION:=2018-10-10-$(PKG_SOURCE_VERSION)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=d366b80d41309531c0c98b26625f23e318f33e31
-PKG_MIRROR_HASH:=6285b9f9aa5a541b8258750f36955a6b307903a87cedd842b73dbfdd2bef8986
+PKG_SOURCE_DATE:=2021-05-14
+PKG_SOURCE_VERSION:=b44d86faba7c91115e4e8f020fd8a09ce752c454
+PKG_MD5SUM:=337938ab585cc7baed0b21e4f1ed7bf1
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
@@ -66,92 +64,92 @@ define Download/ct-firmware-htt
   URL_FILE:=$($(1)_FIRMWARE_FILE_CT_HTT)
 endef
 
-QCA988X_FIRMWARE_FILE_CT:=firmware-2-ct-full-community-21.bin.lede.002
+QCA988X_FIRMWARE_FILE_CT:=firmware-2-ct-full-community-22.bin.lede.017
 define Download/ath10k-firmware-qca988x-ct
   $(call Download/ct-firmware,QCA988X,)
-  MD5SUM:=1b4f1ab7c918b6448f39e6c0da3f2d9b
+  MD5SUM:=ea75879bd01c534ec60ac0704fb48a6c
 endef
 $(eval $(call Download,ath10k-firmware-qca988x-ct))
 
-QCA988X_FIRMWARE_FILE_CT_HTT:=firmware-2-ct-full-htt-mgt-community-21.bin.lede.002
+QCA988X_FIRMWARE_FILE_CT_HTT:=firmware-2-ct-full-htt-mgt-community-22.bin.lede.017
 define Download/ath10k-firmware-qca988x-ct-htt
   $(call Download/ct-firmware-htt,QCA988X,)
-  MD5SUM:=093fc5c4f4818179735ebba1f7aadc7d
+  MD5SUM:=feb1b2ec9cdd5124c6cd6ab7d95321dc
 endef
 $(eval $(call Download,ath10k-firmware-qca988x-ct-htt))
 
 
-QCA9887_FIRMWARE_FILE_CT:=firmware-2-ct-full-community-21.bin.lede.001
+QCA9887_FIRMWARE_FILE_CT:=firmware-2-ct-full-community-22.bin.lede.017
 define Download/ath10k-firmware-qca9887-ct
   $(call Download/ct-firmware,QCA9887,ath10k-9887)
-  MD5SUM:=1f18924345cc1266a99a3483f40d83f4
+  MD5SUM:=74175e9e083989e7d0381b6d6700eaaa
 endef
 $(eval $(call Download,ath10k-firmware-qca9887-ct))
 
-QCA9887_FIRMWARE_FILE_CT_HTT:=firmware-2-ct-full-htt-mgt-community-21.bin.lede.001
+QCA9887_FIRMWARE_FILE_CT_HTT:=firmware-2-ct-full-htt-mgt-community-22.bin.lede.017
 define Download/ath10k-firmware-qca9887-ct-htt
   $(call Download/ct-firmware-htt,QCA9887,ath10k-9887)
-  MD5SUM:=82c9b0a93dcc6865c38f10ae24c8b39c
+  MD5SUM:=a07514f71912ddb907aaa7aa804e7872
 endef
 $(eval $(call Download,ath10k-firmware-qca9887-ct-htt))
 
 
-QCA99X0_FIRMWARE_FILE_CT:=firmware-5-ct-full-community-11.bin-lede.001
+QCA99X0_FIRMWARE_FILE_CT:=firmware-5-ct-full-community-12.bin-lede.017
 define Download/ath10k-firmware-qca99x0-ct
-  $(call Download/ct-firmware,QCA99X0,ath10k-10-4)
-  MD5SUM:=dabe4844abfaf8035855b166065a466a
+  $(call Download/ct-firmware,QCA99X0,ath10k-10-4b)
+  MD5SUM:=aa0e230b3f458b396f9db64c386ac5da
 endef
 $(eval $(call Download,ath10k-firmware-qca99x0-ct))
 
-QCA99X0_FIRMWARE_FILE_CT_HTT:=firmware-5-ct-full-htt-mgt-community-11.bin-lede.001
+QCA99X0_FIRMWARE_FILE_CT_HTT:=firmware-5-ct-full-htt-mgt-community-12.bin-lede.017
 define Download/ath10k-firmware-qca99x0-ct-htt
-  $(call Download/ct-firmware-htt,QCA99X0,ath10k-10-4)
-  MD5SUM:=64335057b754ed6d67c43a55df7cc26f
+  $(call Download/ct-firmware-htt,QCA99X0,ath10k-10-4b)
+  MD5SUM:=28b006881b5d3e253da35c55f8e55059
 endef
 $(eval $(call Download,ath10k-firmware-qca99x0-ct-htt))
 
 
-QCA9984_FIRMWARE_FILE_CT:=firmware-5-ct-full-community-11.bin-lede.001
+QCA9984_FIRMWARE_FILE_CT:=firmware-5-ct-full-community-12.bin-lede.017
 define Download/ath10k-firmware-qca9984-ct
-  $(call Download/ct-firmware,QCA9984,ath10k-9984-10-4)
-  MD5SUM:=e6a7722ae0bf0260ce399468ea93a7ca
+  $(call Download/ct-firmware,QCA9984,ath10k-9984-10-4b)
+  MD5SUM:=f7cfec7d09eedf8ec08bfff11e913bec
 endef
 $(eval $(call Download,ath10k-firmware-qca9984-ct))
 
-QCA9984_FIRMWARE_FILE_CT_HTT:=firmware-5-ct-full-htt-mgt-community-11.bin-lede.001
+QCA9984_FIRMWARE_FILE_CT_HTT:=firmware-5-ct-full-htt-mgt-community-12.bin-lede.017
 define Download/ath10k-firmware-qca9984-ct-htt
-  $(call Download/ct-firmware-htt,QCA9984,ath10k-9984-10-4)
-  MD5SUM:=30c6e2cbad5aa3f545a78e7640ee7c7c
+  $(call Download/ct-firmware-htt,QCA9984,ath10k-9984-10-4b)
+  MD5SUM:=df7f3d81e1c23de34a4e2c13749f7eb1
 endef
 $(eval $(call Download,ath10k-firmware-qca9984-ct-htt))
 
 
-QCA4019_FIRMWARE_FILE_CT:=firmware-5-ct-full-community-11.bin-lede.001
+QCA4019_FIRMWARE_FILE_CT:=firmware-5-ct-full-community-12.bin-lede.017
 define Download/ath10k-firmware-qca4019-ct
-  $(call Download/ct-firmware,QCA4019,ath10k-4019-10-4)
-#  HASH:=3daa439104806b1796c90e65bcafb18164358f0bd9e4d444302f7caf1c220dad
+  $(call Download/ct-firmware,QCA4019,ath10k-4019-10-4b)
+  MD5SUM:=0a91b0b422cf7451aa9371ccfef7af55
 endef
 $(eval $(call Download,ath10k-firmware-qca4019-ct))
 
-QCA4019_FIRMWARE_FILE_CT_HTT:=firmware-5-ct-full-htt-mgt-community-11.bin-lede.001
+QCA4019_FIRMWARE_FILE_CT_HTT:=firmware-5-ct-full-htt-mgt-community-12.bin-lede.017
 define Download/ath10k-firmware-qca4019-ct-htt
-  $(call Download/ct-firmware-htt,QCA4019,ath10k-4019-10-4)
-#  HASH:=eaf64c2942dac4d4718c5f7178be0676aee86b0293443d7b414e3f88290e2d15
+  $(call Download/ct-firmware-htt,QCA4019,ath10k-4019-10-4b)
+  MD5SUM:=3e718f00f27177fa2865d52d9f6ed79c
 endef
 $(eval $(call Download,ath10k-firmware-qca4019-ct-htt))
 
 
-QCA9888_FIRMWARE_FILE_CT:=firmware-5-ct-full-community-11.bin-lede.001
+QCA9888_FIRMWARE_FILE_CT:=firmware-5-ct-full-community-12.bin-lede.017
 define Download/ath10k-firmware-qca9888-ct
-  $(call Download/ct-firmware,QCA9888,ath10k-9888-10-4)
-#  HASH:=8d4415a77745259bbac4fc821c85f4001e58e49d9797a2e23585c44a03505678
+  $(call Download/ct-firmware,QCA9888,ath10k-9888-10-4b)
+  MD5SUM:=bc6dac5d365af8827c59a47ecbe2c8b9
 endef
 $(eval $(call Download,ath10k-firmware-qca9888-ct))
 
-QCA9888_FIRMWARE_FILE_CT_HTT:=firmware-5-ct-full-htt-mgt-community-11.bin-lede.001
+QCA9888_FIRMWARE_FILE_CT_HTT:=firmware-5-ct-full-htt-mgt-community-12.bin-lede.017
 define Download/ath10k-firmware-qca9888-ct-htt
-  $(call Download/ct-firmware-htt,QCA9888,ath10k-9888-10-4)
-#  HASH:=2a1bf2c7b4122469c40d70c48f155a53bd5d30a2900c01fe5ff896abc67acc9c
+  $(call Download/ct-firmware-htt,QCA9888,ath10k-9888-10-4b)
+  MD5SUM:=5c4db24b1c0c38afa475e7afeef9b402
 endef
 $(eval $(call Download,ath10k-firmware-qca9888-ct-htt))
 
@@ -168,15 +166,15 @@ $(Package/ath10k-firmware-default)
   TITLE:=ath10k CT 10.1 firmware for QCA988x devices
   SECTION:=firmware
   CATEGORY:=Firmware
-  PROVIDES:=ath10k-firmware-qca988x
+#PROVIDES:=ath10k-firmware-qca988x
 endef
 define Package/ath10k-firmware-qca988x-ct-htt
 $(Package/ath10k-firmware-default)
   TITLE:=ath10k CT 10.1 htt-mgt fw for QCA988x
   SECTION:=firmware
   CATEGORY:=Firmware
-  PROVIDES:=ath10k-firmware-qca988x
-  DEPENDS:=+kmod-ath10k-ct
+#PROVIDES:=ath10k-firmware-qca988x
+  DEPENDS:=+!PACKAGE_kmod-ath10k-ct-smallbuffers:kmod-ath10k-ct
 endef
 
 define Package/ath10k-firmware-qca9887-ct
@@ -192,7 +190,7 @@ $(Package/ath10k-firmware-default)
   SECTION:=firmware
   CATEGORY:=Firmware
   PROVIDES:=ath10k-firmware-qca9887
-  DEPENDS:=+kmod-ath10k-ct
+  DEPENDS:=+!PACKAGE_kmod-ath10k-ct-smallbuffers:kmod-ath10k-ct
 endef
 
 define Package/ath10k-firmware-qca988x-ct/description
@@ -310,7 +308,7 @@ $(Package/ath10k-firmware-default)
   SECTION:=firmware
   CATEGORY:=Firmware
   PROVIDES:=ath10k-firmware-qca99x0
-  DEPENDS:=+kmod-ath10k-ct
+  DEPENDS:=+!PACKAGE_kmod-ath10k-ct-smallbuffers:kmod-ath10k-ct
 endef
 
 define Package/ath10k-firmware-qca9984-ct
@@ -326,7 +324,7 @@ $(Package/ath10k-firmware-default)
   SECTION:=firmware
   CATEGORY:=Firmware
   PROVIDES:=ath10k-firmware-qca9984
-  DEPENDS:=+kmod-ath10k-ct
+  DEPENDS:=+!PACKAGE_kmod-ath10k-ct-smallbuffers:kmod-ath10k-ct
 endef
 
 define Package/ath10k-firmware-qca4019-ct
@@ -342,7 +340,7 @@ $(Package/ath10k-firmware-default)
   SECTION:=firmware
   CATEGORY:=Firmware
   PROVIDES:=ath10k-firmware-qca4019
-  DEPENDS:=+kmod-ath10k-ct
+  DEPENDS:=+!PACKAGE_kmod-ath10k-ct-smallbuffers:kmod-ath10k-ct
 endef
 
 define Package/ath10k-firmware-qca9888-ct
@@ -358,7 +356,7 @@ $(Package/ath10k-firmware-default)
   SECTION:=firmware
   CATEGORY:=Firmware
   PROVIDES:=ath10k-firmware-qca9888
-  DEPENDS:=+kmod-ath10k-ct
+  DEPENDS:=+!PACKAGE_kmod-ath10k-ct-smallbuffers:kmod-ath10k-ct
 endef
 
 
@@ -391,7 +389,7 @@ define Download/qca99x0-board
   URL:=https://source.codeaurora.org/quic/qsdk/oss/firmware/ath10k-firmware/plain/ath10k/QCA99X0/hw2.0
   URL_FILE:=board-2.bin?id=$(QCA99X0_BOARD_REV)
   FILE:=$(QCA99X0_BOARD_FILE)
-  HASH:=03711ac21e60ef59d3815e235eb721c0c22851b5410299411085aa6f2af45401
+  HASH:=a2b3c653c2363a5641200051d6333d0a
 endef
 $(eval $(call Download,qca99x0-board))
 
@@ -412,7 +410,7 @@ endef
 define Package/ath10k-firmware-qca9887/install
 	$(INSTALL_DIR) $(1)/lib/firmware/ath10k/QCA9887/hw1.0
 	$(INSTALL_DATA) \
-		$(PKG_BUILD_DIR)/QCA9887/hw1.0/10.2.4-1.0/firmware-5.bin_10.2.4-1.0-00033 \
+		$(PKG_BUILD_DIR)/QCA9887/hw1.0/10.2.4-1.0/firmware-5.bin_10.2.4-1.0-00047 \
 		$(1)/lib/firmware/ath10k/QCA9887/hw1.0/firmware-5.bin
 	$(INSTALL_DATA) \
 		$(PKG_BUILD_DIR)/QCA9887/hw1.0/board.bin \
@@ -425,7 +423,7 @@ define Package/ath10k-firmware-qca9888/install
 		$(PKG_BUILD_DIR)/QCA9888/hw2.0/board-2.bin \
 		$(1)/lib/firmware/ath10k/QCA9888/hw2.0/board-2.bin
 	$(INSTALL_DATA) \
-		$(PKG_BUILD_DIR)/QCA9888/hw2.0/3.5.3/firmware-5.bin_10.4-3.5.3-00053 \
+		$(PKG_BUILD_DIR)/QCA9888/hw2.0/3.9.0.2/firmware-5.bin_10.4-3.9.0.2-00142 \
 		$(1)/lib/firmware/ath10k/QCA9888/hw2.0/firmware-5.bin
 endef
 
@@ -435,7 +433,7 @@ define Package/ath10k-firmware-qca988x/install
 		$(PKG_BUILD_DIR)/QCA988X/hw2.0/board.bin \
 		$(1)/lib/firmware/ath10k/QCA988X/hw2.0/
 	$(INSTALL_DATA) \
-		$(PKG_BUILD_DIR)/QCA988X/hw2.0/10.2.4-1.0/firmware-5.bin_10.2.4-1.0-00037 \
+		$(PKG_BUILD_DIR)/QCA988X/hw2.0/10.2.4-1.0/firmware-5.bin_10.2.4-1.0-00047 \
 		$(1)/lib/firmware/ath10k/QCA988X/hw2.0/firmware-5.bin
 endef
 
@@ -608,23 +606,23 @@ define Package/ath10k-firmware-qca9888-ct-htt/install
 		$(1)/lib/firmware/ath10k/QCA9888/hw2.0/ct-firmware-5.bin
 endef
 
-#$(eval $(call BuildPackage,ath10k-firmware-qca9887))
+$(eval $(call BuildPackage,ath10k-firmware-qca9887))
 $(eval $(call BuildPackage,ath10k-firmware-qca9888))
-#$(eval $(call BuildPackage,ath10k-firmware-qca988x))
+$(eval $(call BuildPackage,ath10k-firmware-qca988x))
 #$(eval $(call BuildPackage,ath10k-firmware-qca99x0))
 #$(eval $(call BuildPackage,ath10k-firmware-qca6174))
 #$(eval $(call BuildPackage,ath10k-firmware-qca9984))
 #$(eval $(call BuildPackage,ath10k-firmware-qca4019))
 
-$(eval $(call BuildPackage,ath10k-firmware-qca9887-ct))
-$(eval $(call BuildPackage,ath10k-firmware-qca9887-ct-htt))
-$(eval $(call BuildPackage,ath10k-firmware-qca988x-ct))
-$(eval $(call BuildPackage,ath10k-firmware-qca988x-ct-htt))
-$(eval $(call BuildPackage,ath10k-firmware-qca99x0-ct))
-$(eval $(call BuildPackage,ath10k-firmware-qca99x0-ct-htt))
-$(eval $(call BuildPackage,ath10k-firmware-qca9984-ct))
-$(eval $(call BuildPackage,ath10k-firmware-qca9984-ct-htt))
-$(eval $(call BuildPackage,ath10k-firmware-qca4019-ct))
-$(eval $(call BuildPackage,ath10k-firmware-qca4019-ct-htt))
-$(eval $(call BuildPackage,ath10k-firmware-qca9888-ct))
-$(eval $(call BuildPackage,ath10k-firmware-qca9888-ct-htt))
+#$(eval $(call BuildPackage,ath10k-firmware-qca9887-ct))
+#$(eval $(call BuildPackage,ath10k-firmware-qca9887-ct-htt))
+#$(eval $(call BuildPackage,ath10k-firmware-qca988x-ct))
+#$(eval $(call BuildPackage,ath10k-firmware-qca988x-ct-htt))
+#$(eval $(call BuildPackage,ath10k-firmware-qca99x0-ct))
+#$(eval $(call BuildPackage,ath10k-firmware-qca99x0-ct-htt))
+#$(eval $(call BuildPackage,ath10k-firmware-qca9984-ct))
+#$(eval $(call BuildPackage,ath10k-firmware-qca9984-ct-htt))
+#$(eval $(call BuildPackage,ath10k-firmware-qca4019-ct))
+#$(eval $(call BuildPackage,ath10k-firmware-qca4019-ct-htt))
+#$(eval $(call BuildPackage,ath10k-firmware-qca9888-ct))
+#$(eval $(call BuildPackage,ath10k-firmware-qca9888-ct-htt))

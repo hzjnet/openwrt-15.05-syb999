@@ -15,7 +15,7 @@
 		bootargs = "console=ttyS0,115200";
 	};
 
-	sdhci@10130000 {
+	sdhci@1E130000 {
 		status = "okay";
 	};
 
@@ -44,7 +44,6 @@
 					label = "factory";
 					reg = <0x40000 0x10000>;
 				};
-
 
 				partition@50000 {
 					label = "firmware";
@@ -88,11 +87,7 @@
 	};
 
 	ethernet@1e100000 {
-		mtd-mac-address = <&factory 0x4>;
-	};
-
-	xhci@1e1c0000 {
-		status = "okay";
+		mtd-mac-address = <&factory 0xe000>;
 	};
 
 	gpio-keys-polled {
@@ -125,7 +120,6 @@
 			label = "jdcloud:blue:sysb";
 			gpios = <&gpio0 12 1>;
 		};
-
 	};
 
 
