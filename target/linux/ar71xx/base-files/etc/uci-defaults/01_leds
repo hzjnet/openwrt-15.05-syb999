@@ -46,6 +46,12 @@ ap113)
 	ucidef_set_led_usbdev "usb" "USB" "ap113:green:usb" "1-1"
 	;;
 
+belair20e11)
+	ucidef_set_led_wlan "wlan2g" "WLAN2G" "belair:blue:wlan2g" "phy0tpt"
+	ucidef_set_led_wlan "wlan5g" "WLAN5G" "belair:blue:wlan5g" "phy1tpt"
+	ucidef_set_led_switch "internet" "INTERNET" "belair:blue:internet" "switch0" "0x20"
+	;;
+
 k2t)
 	ucidef_set_led_default "yellow" "STATUS(yellow)" "k2t:yellow:lan" "1"
 	;;
@@ -231,6 +237,10 @@ esr1750)
 epg5000)
 	ucidef_set_led_wlan "wlan2g" "WLAN 2.4 GHz" "epg5000:blue:wlan-2g" "phy1tpt"
 	ucidef_set_led_wlan "wlan5g" "WLAN 5 GHz" "epg5000:blue:wlan-5g" "phy0tpt"
+	;;
+
+fap-022wld)
+	ucidef_set_led_default "power" "POWER" "fap:green:power" "0"
 	;;
 
 hiwifi-hc6361)
@@ -457,6 +467,7 @@ tl-wa901nd-v4)
 	ucidef_set_led_wlan "wlan" "WLAN" "tp-link:green:wlan" "phy0tpt"
 	;;
 
+wb2000 | \
 tl-wdr3500)
 	ucidef_set_led_usbdev "usb" "USB" "tp-link:green:usb" "1-1"
 	ucidef_set_led_wlan "wlan2g" "WLAN2G" "tp-link:green:wlan2g" "phy0tpt"
@@ -516,6 +527,10 @@ tl-wr941nd-v5)
 	ucidef_set_led_switch "lan2" "LAN2" "tp-link:green:lan2" "switch0" "0x08"
 	ucidef_set_led_switch "lan3" "LAN3" "tp-link:green:lan3" "switch0" "0x10"
 	ucidef_set_led_switch "lan4" "LAN4" "tp-link:green:lan4" "switch0" "0x02"
+	ucidef_set_led_wlan "wlan" "WLAN" "tp-link:green:wlan" "phy0tpt"
+	;;
+
+tl-mw300-r4)
 	ucidef_set_led_wlan "wlan" "WLAN" "tp-link:green:wlan" "phy0tpt"
 	;;
 

@@ -8,13 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fstools
-PKG_RELEASE:=1
+PKG_VERSION:=2021-03-05
+PKG_RELEASE=1
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL=https://git.openwrt.org/project/fstools.git
-PKG_MD5SUM:=8ebc6e8e3720c3997eaf28f658a80d06
-PKG_SOURCE_DATE:=2020-05-06
-PKG_SOURCE_VERSION:=eec16e2f275dc3dcf71e4a27dd608d3dc8f8df1a
+PKG_SOURCE_URL:=https://git.openwrt.org/project/fstools.git
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM:=8c4ce1824bb9cdc1893fcc49217317d4
+PKG_SOURCE_DATE:=2021-03-05
+PKG_SOURCE_VERSION:=3c38f0c889177dfac51fa7213c567a110709be71
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 CMAKE_INSTALL:=1
 
 PKG_LICENSE:=GPL-2.0
@@ -68,13 +71,6 @@ define Package/fstools/config
 			This option enables the compression using zlib on the storage device.
 endef
 
-define Package/snapshot-tool
-  SECTION:=base
-  CATEGORY:=Base system
-  TITLE:=rootfs snapshoting tool
-  DEPENDS:=+libubox +fstools
-endef
-
 define Package/block-mount
   SECTION:=base
   CATEGORY:=Base system
@@ -86,22 +82,16 @@ define Package/blockd
   SECTION:=base
   CATEGORY:=Base system
   TITLE:=Block device automounting
-  DEPENDS:=+block-mount +fstools +libubus +kmod-fs-autofs4 +libblobmsg-json +libjson-c
+  DEPENDS:=+block-mount +fstools +libubus +kmod-fs-autofs4
 endef
 
 define Package/fstools/install
 	$(INSTALL_DIR) $(1)/sbin $(1)/lib
 
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/{mount_root,jffs2reset} $(1)/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/{mount_root,jffs2reset,snapshot_tool} $(1)/sbin/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/libfstools.so $(1)/lib/
-	$(LN) jffs2reset $(1)/sbin/jffs2mark
-endef
-
-define Package/snapshot-tool/install
-	$(INSTALL_DIR) $(1)/sbin
-
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/snapshot_tool $(1)/sbin/
 	$(INSTALL_BIN) ./files/snapshot $(1)/sbin/
+	$(LN) jffs2reset $(1)/sbin/jffs2mark
 endef
 
 define Package/block-mount/install
@@ -133,6 +123,5 @@ define Build/InstallDev
 endef
 
 $(eval $(call BuildPackage,fstools))
-$(eval $(call BuildPackage,snapshot-tool))
 $(eval $(call BuildPackage,block-mount))
 $(eval $(call BuildPackage,blockd))

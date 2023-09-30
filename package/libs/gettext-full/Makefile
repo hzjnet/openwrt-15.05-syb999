@@ -23,7 +23,7 @@ PKG_LICENSE:=GPL-3.0+
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=0
-PKG_BUILD_DEPENDS:=gettext-full/host
+PKG_BUILD_DEPENDS:=gettext-full/host libiconv/host
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/host-build.mk
@@ -33,6 +33,7 @@ define Package/libintl-full
   CATEGORY:=Libraries
   TITLE:=GNU Internationalization library
   URL:=http://www.gnu.org/software/gettext/
+  DEPENDS:=+libpthread +librt
 endef
 
 TARGET_CFLAGS += $(FPIC)
@@ -42,6 +43,8 @@ endif
 ifdef CONFIG_USE_MUSL
   TARGET_CFLAGS += -D__UCLIBC__
 endif
+
+TARGET_LDFLAGS += -lrt -lpthread
 
 CONFIGURE_ARGS += \
 	--enable-shared \

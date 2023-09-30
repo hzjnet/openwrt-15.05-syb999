@@ -22,29 +22,15 @@ function getxmlyaudios(){
 
 	cd /$paudiopath
 
-	curl -s --retry 3 --retry-delay 2 --connect-timeout 10 -m 20 -H ""user-agent": "Mozilla/5.0"" $paudiourl > /tmp/tmpXM.xmlyhttp
-	sleep 2
-	xmlyhttp=$(cat /tmp/tmpXM.xmlyhttp)  
-
-	for i in `echo "$xmlyhttp" | sed 's/</\n/g'`
-	do  
-	    echo $i >> /tmp/tmpXM.xmlyhttp1
-	done
-
-	cat /tmp/tmpXM.xmlyhttp1 | grep isPaid > /tmp/tmpXM.xmlyhttp2
-	cat /tmp/tmpXM.xmlyhttp1 | grep showShareBtn > /tmp/tmpXM.xmlyhttp2n
-	cat /tmp/tmpXM.xmlyhttp2n | sed 's/title/\n/g'| grep showLikeBtn | cut -d '"' -f 1 | sed -e 's/\\/＼/g' | sed -e 's/\//／/g' | sed -e 's/</《/g' | sed -e 's/>/》/g' | sed -e 's/:/：/g' | sed -e 's/*//g' | sed -e 's/?/？/g' | sed -e 's/\"/“/g' > /tmp/tmpXM.filenamelist
-	xmlyhttp2=$(cat /tmp/tmpXM.xmlyhttp2)
-	for i in `echo "$xmlyhttp2" | sed 's/{\"index\":/\n/g'`
-	do  
-	    echo $i >> /tmp/tmpXM.xmlyhttp3
-	done
-
-	cat /tmp/tmpXM.xmlyhttp3 | grep trackId > /tmp/tmpXM.xmlyhttp4
-	cat /tmp/tmpXM.xmlyhttp4 | grep '^[0-9]' | cut -d ',' -f 2 | cut -d ':' -f 2 > /tmp/tmpXM.xmlyhttp5
-	cat /tmp/tmpXM.xmlyhttp5 > /tmp/tmpXM.xmlyhttp5d
-
-	cat /tmp/tmpXM.xmlyhttp5d | while read LINE
+	newlistprefix="https://www.ximalaya.com/revision/album/v1/getTracksList?albumId="
+	newlistpagenumprefix="&pageNum="
+	newlistpagesuffix="&sort=1"
+	thenewlist="${newlistprefix}${newlistalbumId}${newlistpagenumprefix}${newlistpagenum}${newlistpagesuffix}"
+	curl -s --retry 3 --retry-delay 2 --connect-timeout 10 -m 20 -H ""user-agent": "Mozilla/5.0"" $thenewlist > /tmp/tmpXM.newlist
+	cat /tmp/tmpXM.newlist | sed 's/\/sound\//\n/g' | sed '1d' | cut -d '"' -f 1 > /tmp/tmpXM.newlist2
+	cat /tmp/tmpXM.newlist | sed 's/\"title\"/\n/g' | sed '1d' | cut -d '"' -f 2 | sed 's/[ ][ ]*/-/g' | sed -e 's/\\/＼/g' | sed -e 's/\//／/g' | sed -e 's/</《/g' | sed -e 's/>/》/g' | sed -e 's/:/：/g' | sed -e 's/*//g' | sed -e 's/?/？/g' | sed -e 's/\"/“/g'  | sed -e 's/\ /-/g' | sed -e 's/|/-/g'  > /tmp/tmpXM.filenamelist
+	cat /tmp/tmpXM.newlist | sed 's/\"index\":/\n/g' | sed '1d'| cut -d ',' -f 1 > /tmp/tmpXM.newlist3
+	cat /tmp/tmpXM.newlist2 | while read LINE
 	do
 		xmlytrackId=$(echo $LINE)
 		adurlprefix=$urlprefix
@@ -56,11 +42,11 @@ function getxmlyaudios(){
 		echo -n $xmvvmd5 | md5sum > /tmp/tmp.XM.md5s
 		cat /tmp/tmp.XM.md5s | cut -d ' ' -f 1 > /tmp/tmp.XM.md5ss
 		xmsign1=$(cat /tmp/tmp.XM.md5ss)
-		head -n 128 /dev/urandom | tr -dc "123456789" | head -c2 > /tmp/tmp.XM.randum1
+		head -n 6 /dev/urandom | tr -dc "123456789" | head -c2 > /tmp/tmp.XM.randum1
 		rnum1=\($(cat /tmp/tmp.XM.randum1)\)
-		head -n 128 /dev/urandom | tr -dc "123456789" | head -c2 > /tmp/tmp.XM.randum2
+		head -n 6 /dev/urandom | tr -dc "123456789" | head -c2 > /tmp/tmp.XM.randum2
 		rnum2=\($(cat /tmp/tmp.XM.randum2)\)
-		head -n 128 /dev/urandom | tr -dc "012345" | head -c3 > /tmp/tmp.XM.randum3
+		head -n 6 /dev/urandom | tr -dc "012345" | head -c3 > /tmp/tmp.XM.randum3
 		bnum=$(cat /tmp/tmp.XM.randum3)
 		date +"%s" > /tmp/tmp.XM.datelst
 		optimestamp=$(cat /tmp/tmp.XM.datelst)
@@ -83,11 +69,7 @@ function getxmlyaudios(){
 		rm /tmp/tmp.XM.*
 	done
 
-	cat /tmp/tmpXM.xmlyhttp3 | grep trackId > /tmp/tmpXM.xmlyhttp0num
-	cat /tmp/tmpXM.xmlyhttp0num | grep '^[0-9]' | cut -d ',' -f 1 > /tmp/tmpXM.xmlyhttp1num
-	sed '1!G;h;$!d' /tmp/tmpXM.xmlyhttp1num > /tmp/tmpXM.xmlyhttp2num
-
-	cat /tmp/tmpXM.xmlyhttp0num | grep tag | cut -d ',' -f 5 | cut -d '"' -f 4 | sed -e 's/《//g' | sed -e 's/》//g' | sed -e 's/（/-/g' | sed -e 's/）/-/g' |  sed -e 's/？//g' | sed -e 's/?//g' | sed -e 's/|//g' | sed -e 's/\\//g' | sed -e 's/\"//g' | sed -e 's/“//g' | sed -e 's/”//g' | sed -e 's/,//g' | sed -e "s/'//g" | sed -e 's/://g' | sed -e "s/[0-9]//g" | sed -e "s/第集//g" | sed -e "s/第章//g" > /tmp/tmpXM.xmlynam
+	sed '1!G;h;$!d' /tmp/tmpXM.newlist3 > /tmp/tmpXM.xmlyhttp2num
 
 	ls -al | grep "^-" > /tmp/tmpXM.filelist
 
@@ -95,22 +77,21 @@ function getxmlyaudios(){
 	do
 		xtmpcounthead=$tmpcounthead
 		xmlyturenum=$(tail -n $xtmpcounthead /tmp/tmpXM.xmlyhttp2num | head -n 1)
-		xmlyturename=$(head -n $xtmpcounthead /tmp/tmpXM.xmlynam | tail -n 1 )
+		xmlyturename=$(cat /tmp/tmpXM.filenamelist | head -n 1)
 		if [ "$xmlyturename" = "$paudioname" ];then
 			xmlyturename=""
 		fi
-		xmlyturenamed=$(cat /tmp/tmpXM.filenamelist | head -n 1)
 		if [ $xmlyturenum -le 9 ];then
 			nxmlyturenum=000$xmlyturenum
-			mv -f /$paudiopath/$rpaudionum.m4a /$paudiopath/$paudioname$nxmlyturenum$xmlyturename$xmlyturenamed.m4a
+			mv -f /$paudiopath/$rpaudionum.m4a /$paudiopath/${paudioname}${nxmlyturenum}-${xmlyturename}.m4a
 		elif [ $xmlyturenum -le 99 ];then
 			nnxmlyturenum=00$xmlyturenum
-			mv -f /$paudiopath/$rpaudionum.m4a /$paudiopath/$paudioname$nnxmlyturenum$xmlyturename$xmlyturenamed.m4a
+			mv -f /$paudiopath/$rpaudionum.m4a /$paudiopath/${paudioname}${nnxmlyturenum}-${xmlyturename}.m4a
 		elif [ $xmlyturenum -le 999 ];then
 			nnnxmlyturenum=0$xmlyturenum
-			mv -f /$paudiopath/$rpaudionum.m4a /$paudiopath/$paudioname$nnnxmlyturenum$xmlyturename$xmlyturenamed.m4a
+			mv -f /$paudiopath/$rpaudionum.m4a /$paudiopath/${paudioname}${nnnxmlyturenum}-${xmlyturename}.m4a
 		else
-			mv -f /$paudiopath/$rpaudionum.m4a /$paudiopath/$paudioname$xmlyturenum$xmlyturename$xmlyturenamed.m4a
+			mv -f /$paudiopath/$rpaudionum.m4a /$paudiopath/${paudioname}${xmlyturenum}-${xmlyturename}.m4a
 		fi
 		sed 1d -i /tmp/tmpXM.filenamelist
 		tmpcounthead=$(echo `expr $tmpcounthead + 1`)
@@ -126,29 +107,19 @@ function getxmlyaudios(){
 }
 
 if [ ! $(uci get autodl.@autodl[0].xmlygetpages) ];then
-	paudiourl=$(uci get autodl.@autodl[0].xmlyurl)
+	newlistalbumId=$(uci get autodl.@autodl[0].xmlyurl | sed "s/\/$//" | sed 's/album\//^/' | cut -d '^' -f 2)
+	newlistpagenum=$(uci get autodl.@autodl[0].xmlypagenum)
 	getxmlyaudios
 else
-	uci get autodl.@autodl[0].xmlyurl > /tmp/doxmly.seturl.tmp
+	newlistalbumId=$(uci get autodl.@autodl[0].xmlyurl | sed "s/\/$//" | sed 's/album\//^/' | cut -d '^' -f 2)
+	newlistpagenum=$(uci get autodl.@autodl[0].xmlypagenum)
 	xmlypagesendcount=$(uci get autodl.@autodl[0].xmlygetpages)
 	xmlypagescount=0
-	if [ ! $(uci get autodl.@autodl[0].xmlyurl | cut -d "/" -f 6 | sed 's/p//') ];then
-		paudiourlstartpage=1
-	else
-		paudiourlstartpage=$(uci get autodl.@autodl[0].xmlyurl | cut -d "/" -f 6 | sed 's/p//')
-	fi
 	while [ $xmlypagescount -lt $xmlypagesendcount ]
 	do
-		if [ $xmlypagescount -eq 0 ];then
-			paudiourlstartpage=$(echo `expr $paudiourlstartpage + $xmlypagescount`)
-		else
-			paudiourlstartpage=$(echo `expr $paudiourlstartpage + 1`)
-		fi
-		sed -i "s/$(cat /tmp/doxmly.seturl.tmp | cut -d "/" -f 6)/p$paudiourlstartpage/g" /tmp/doxmly.seturl.tmp
-
 		xmlypagescount=$(echo `expr $xmlypagescount + 1`)
-		paudiourl=$(cat /tmp/doxmly.seturl.tmp)
 		getxmlyaudios
+		newlistpagenum=$(echo `expr $newlistpagenum + 1`)
 	done
 	rm /tmp/doxmly.seturl.tmp
 fi

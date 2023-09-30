@@ -139,6 +139,16 @@ case $board in
 	hw550-3g)
 		set_usb_led "hw550-3g:green:usb"
 		;;
+	#default configuration 0 is LED on state, 1 is off.
+	wna4320v2|\
+	micap-1321w)
+		ucidef_set_led_default "power" "power" "$board:white:power" "0"
+		ucidef_set_led_default "wifi" "wifi" "$board:white:wlan" "0"
+		;;
+	#default configuration 1 is LED on state, 0 is off.
+	ytxc-oem-ap)
+		ucidef_set_led_default "wifi" "wifi" "ytxc-oem-ap:blue:wifi" "1"
+		;;
 	mlw221|\
 	mlwg2)
 		set_wifi_led "kingston:blue:wifi"
@@ -156,6 +166,10 @@ case $board in
 	mr-102n)
 		set_wifi_led "mr-102n:green:wlan"
 		set_usb_led "mr-102n:green:usb"
+		;;
+	mt7621-rtl8367s)
+		ucidef_set_led_switch "lan" "lan" "green:lan" "switch1" "0x0f"
+		ucidef_set_led_switch "wan" "wan" "green:wan" "switch1" "0x10"
 		;;
 	mzk-w300nh2)
 		set_wifi_led "mzkw300nh2:amber:wlan"
@@ -232,6 +246,11 @@ case $board in
 		ucidef_set_led_default "power" "power" "linksys:white:power" "1"
 		ucidef_set_led_default "wifi" "wifi" "linksys:orange:wifi" "1"
 		;;
+	mir3g)
+		ucidef_set_led_switch "wan-amber"  "WAN (amber)"  "mir3g:amber:wan"  "switch0" "0x02" "0x08"
+		ucidef_set_led_switch "lan1-amber" "LAN1 (amber)" "mir3g:amber:lan1" "switch0" "0x08" "0x08"
+		ucidef_set_led_switch "lan2-amber" "LAN2 (amber)" "mir3g:amber:lan2" "switch0" "0x04" "0x08"
+		;;
 	mi-router-ac2100)
 		ucidef_set_led_netdev "wan" "wan" "mi-router-ac2100:blue:wan" "eth0.2"
 		;;
@@ -294,8 +313,8 @@ case $board in
 		ucidef_set_led_netdev "wifi5g" "WIFI5G" "$board:blue:wifi" "wlan0"
 		ucidef_set_led_netdev "wan" "WAN" "$board:blue:internet" "eth0.2" "tx rx"
 		;;
-	daishuyun)
-		ucidef_set_led_default "wifi" "WIFI" "daishuyun:green:wifi" "wlan1"
+	dsbox-dsr1)
+		ucidef_set_led_netdev "wan" "WAN" "dsr1:green:status" "eth0.2" "tx rx"
 		;;
 	jcg-y2)
 		ucidef_set_led_netdev "internet" "internet" "jcg:blue:internet" "eth0.2"
@@ -307,6 +326,11 @@ case $board in
 		set_usb_led "newifi-d2:blue:usb"
 		ucidef_set_led_netdev "wlan2g" "WiFi 2.4GHz" "newifi-d2:blue:wlan2g" "wlan0"
 		ucidef_set_led_netdev "wlan5g" "WiFi 5GHz" "newifi-d2:blue:wlan5g" "wlan1"
+		;;
+	nokia-a040wq)
+		set_usb_led "nokia:blue:usb"
+		ucidef_set_led_netdev "wlan2g" "WiFi 2.4GHz" "nokia:blue:wlan2g" "wlan0"
+		ucidef_set_led_netdev "wlan5g" "WiFi 5GHz" "nokia:blue:wlan5g" "wlan1"
 		;;
 	psg1208)
 		ucidef_set_led_default "wps" "wps" "phicomm:white:wps" "1"
@@ -327,11 +351,12 @@ case $board in
 	zte-q7)
 		set_wifi_led "zte:blue:status"
 		;;
-	youku-yk1)
-		ucidef_set_led_default "power" "power" "youku-yk1:blue:power" "1"
-		ucidef_set_led_netdev "wifi" "WIFI" "youku-yk1:blue:air" "wlan0"
-		set_usb_led "youku-yk1:blue:usb"
-		ucidef_set_led_netdev "wan" "WAN" "youku-yk1:blue:wan" "eth0.2" "tx rx"
+	youku-yk-l1|\
+	youku-yk-l1c)
+		ucidef_set_led_default "power" "power" "youku:blue:power" "1"
+		ucidef_set_led_netdev "wifi" "WIFI" "youku:blue:air" "wlan0"
+		set_usb_led "youku:blue:usb"
+		ucidef_set_led_netdev "wan" "WAN" "youku:blue:wan" "eth0.2" "tx rx"
 		;;
 	ghl-r-001-e|\
 	ghl-r-001-f)
@@ -348,6 +373,9 @@ case $board in
 		ucidef_set_led_switch "lan1" "LAN1" "zbt-we1226:green:lan1" "switch0" "0x01"
 		ucidef_set_led_switch "lan2" "LAN2" "zbt-we1226:green:lan2" "switch0" "0x02"
 		ucidef_set_led_switch "wan" "WAN" "zbt-we1226:green:wan" "switch0" "0x10"
+		;;
+	zte-e8820s)
+		ucidef_set_led_netdev "system" "system" "e8820s:white:system" "eth0" "tx rx"
 		;;
 esac
 

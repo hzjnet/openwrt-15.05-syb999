@@ -1,16 +1,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gmediarender
-PKG_VERSION:=0.0.8
+PKG_VERSION:=2023-07-16
 PKG_RELEASE:=1
 PKG_MAINTAINER:=h.zeller@acm.org
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/hzeller/gmrender-resurrect.git
-PKG_SOURCE_VERSION:=26d8f7edf5336bc30f7334c6ad459bf7f4f90ff2
+PKG_SOURCE_VERSION:=3a1234f8694c0f406717c34f700cb07324d29076
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_MD5SUM:=f002d6a154bb5a73cb9a784cbc3be9d3
+PKG_MD5SUM:=cdca921fa5a45e819cb8c67ea59a45fe
 
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=COPYING
@@ -35,25 +35,10 @@ define Package/gmrender/description
 	Headless UPnP Renderer
 endef
 
-TARGET_CFLAGS += -std=gnu99
-
-define Package/gmediarender/postinst
-#!/bin/sh
-if [ -z "$${IPKG_INSTROOT}" ]; then
-	echo "Enabling rc.d symlink for gmediarender"
-	/etc/init.d/gmediarender enable
-fi
-exit 0
-endef
-
-define Package/gmediarender/prerm
-#!/bin/sh
-if [ -z "$${IPKG_INSTROOT}" ]; then
-	echo "Removing rc.d symlink for gmediarender"
-	/etc/init.d/gmediarender disable
-fi
-exit 0
-endef
+CONFIGURE_ARGS+= \
+	CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
+	--with-build-cc="$(HOSTCC)" \
+	--prefix="\usr"
 
 define Package/gmediarender/install
 	$(INSTALL_DIR) $(1)/usr/bin

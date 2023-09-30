@@ -94,6 +94,9 @@ ramips_board_detect() {
 	*"Buffalo WSR-1166DHP")
 		name="wsr-1166"
 		;;
+	*"Bussiness Router")
+		name="bussiness-router"
+		;;
 	*"Comfast CF-WR800N")
 		name="cf-wr800n"
 		;;
@@ -217,11 +220,23 @@ ramips_board_detect() {
 	*"Planex MZK-750DHP")
 		name="mzk-750dhp"
 		;;
+	*"YTXC OEM AP")
+		name="ytxc-oem-ap"
+		;;
+	*"ZYXEL MiCAP-1321W")
+		name="micap-1321w"
+		;;
+	*"ZYXEL WNA4320 v2")
+		name="wna4320v2"
+		;;
 	*"Microduino MicroWRT")
 		name="microwrt"
 		;;
 	*"NBG-419N")
 		name="nbg-419n"
+		;;
+	*"NEOTel MB 0002")
+		name="mb-0002"
 		;;
 	*"Netgear WNCE2001")
 		name="wnce2001"
@@ -388,6 +403,9 @@ ramips_board_detect() {
 	*"XDX RN502J")
 		name="xdxrn502j"
 		;;
+	*"Xiaomi Mi Router 3G")
+		name="mir3g"
+		;;
 	*"Xiaomi Mi Router AC2100")
 		name="mi-router-ac2100"
 		;;
@@ -436,8 +454,8 @@ ramips_board_detect() {
 	*"Lenovo Y1S")
 		name="y1s"
 		;;
-	*"Daishuyun")
-		name="daishuyun"
+	*"Dsbox DSR1")
+		name="dsbox-dsr1"
 		;;
 	*"GHL-R-001-E")
 		name="ghl-r-001-e"
@@ -445,8 +463,8 @@ ramips_board_detect() {
 	*"GHL-R-001-F")
 		name="ghl-r-001-f"
 		;;
-	*"JDCloud-1")
-		name="jdcloud-1"
+	*"JDCloud RE-SP-01B")
+		name="jdcloud-re-sp-01b"
 		;;
 	*"K2P")
 		name="k2p"
@@ -466,8 +484,11 @@ ramips_board_detect() {
 			name="linkits7688"
 		fi
 		;;
-	*"Youku Yk1")
-		name="youku-yk1"
+	*"Youku YK-L1")
+		name="youku-yk-l1"
+		;;
+	*"Youku YK-L1c")
+		name="youku-yk-l1c"
 		;;
 	*"Phicomm PSG1208")
 		name="psg1208"
@@ -496,11 +517,17 @@ ramips_board_detect() {
 	*"HiWiFi HC5962")
 		name="hc5962"
 		;;
+	*"MT7621-RTL8367S")
+		name="mt7621-rtl8367s"
+		;;
 	*"Newifi-D1")
 		name="newifi-d1"
 		;;
 	*"Newifi-D2")
 		name="newifi-d2"
+		;;
+	*"NOKIA-A040WQ")
+		name="nokia-a040wq"
 		;;
 	*"JCG-Y2")
 		name="jcg-y2"
@@ -510,6 +537,9 @@ ramips_board_detect() {
 		;;
 	*"ZBT-WE1226")
 		name="zbt-we1226"
+		;;
+	*"ZTE E8820S")
+		name="zte-e8820s"
 		;;
 	*)
 		name="generic"

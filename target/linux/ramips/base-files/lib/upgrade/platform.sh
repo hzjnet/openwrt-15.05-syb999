@@ -32,6 +32,7 @@ platform_check_image() {
 	awm003-evb | \
 	bc2 | \
 	broadway | \
+	bussiness-router | \
 	carambola | \
 	cf-wr800n | \
 	d105 | \
@@ -129,15 +130,18 @@ platform_check_image() {
 	x8 |\
 	xiaomi-miwifi-mini |\
 	xiaoyu-xy-c5 |\
+	wna4320v2 |\
+	micap-1321w |\
 	miwifi-nano |\
+	ytxc-oem-ap |\
 	y1 |\
 	y1s |\
-	daishuyun |\
+	dsbox-dsr1 |\
 	zbt-wa05 |\
 	zbt-we1226 |\
 	zbt-wg2626 |\
 	zte-q7 |\
-	hc5962 |\
+	mb-0002 |\
 	newifi-d1 |\
 	newifi-d2 |\
 	jcg-y2 |\
@@ -151,8 +155,9 @@ platform_check_image() {
 	360p2 |\
 	ghl-r-001-e |\
 	ghl-r-001-f |\
-	jdcloud-1 |\
-	youku-yk1)
+	jdcloud-re-sp-01b |\
+	youku-yk-l1 |\
+	youku-yk-l1c)
 		[ "$magic" != "27051956" ] && {
 			echo "Invalid image type."
 			return 1
@@ -214,8 +219,11 @@ platform_do_upgrade() {
 	local board=$(ramips_board_name)
 
 	case "$board" in
+	mir3g|\
 	mi-router-ac2100|\
+	nokia-a040wq |\
 	redmi-router-ac2100|\
+	zte-e8820s|\
 	hc5962)
 		nand_do_upgrade "$ARGV"
 		;;
@@ -233,9 +241,4 @@ disable_watchdog() {
 	}
 }
 
-blink_led() {
-	. /etc/diag.sh; set_state upgrade
-}
-
 append sysupgrade_pre_upgrade disable_watchdog
-append sysupgrade_pre_upgrade blink_led

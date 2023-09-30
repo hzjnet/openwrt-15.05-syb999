@@ -163,6 +163,17 @@ define Device/CSAC
 endef
 TARGET_DEVICES += CSAC
 
+define Device/MI4PRO
+  BOARDNAME = MI4PRO
+  CONSOLE = ttyATH0,115200
+  KERNEL_SIZE := 1472k
+  ROOTFS_SIZE := 14528k
+  IMAGE_SIZE := 16000k
+  MTDPARTS := spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,14528k(rootfs),1472k(kernel),64k(art)ro,16000k@0x50000(firmware)
+  IMAGE/sysupgrade.bin := append-rootfs | pad-rootfs | pad-to $$$$(ROOTFS_SIZE) | append-kernel | check-size $$$$(IMAGE_SIZE)
+endef
+TARGET_DEVICES += MI4PRO
+
 define Device/LG-A291Q
   BOARDNAME = LG-A291Q
   CONSOLE = ttyATH0,115200
@@ -268,6 +279,15 @@ $(Device/tplink)
   TPLINK_FLASHLAYOUT := 16Mlzma
   IMAGE_SIZE := 15872k
 endef
+
+define Device/wb2000
+$(Device/tplink-16mlzma)
+  BOARDNAME = WB2000
+  DEVICE_PROFILE = WB2000
+  TPLINK_HWID := 0x00200001
+endef
+
+TARGET_DEVICES += wb2000
 
 define Device/tl-wdr4300-v1
 $(Device/tplink-16mlzma)
@@ -593,6 +613,20 @@ define Device/tl-wr743nd-v2
 endef
 TARGET_DEVICES += tl-wr740n-v4 tl-wr740n-v5 tl-wr740n-v6 tl-wr741nd-v1 tl-wr741nd-v2 tl-wr741nd-v4 tl-wr741nd-v5 mw153r tl-wr743nd-v2
 
+define Device/fap-022wld
+    $(Device/tplink-16mlzma)
+    BOARDNAME := FAP-022WLD
+    DEVICE_PROFILE := fap-022wld
+    TPLINK_HWID := 0x08410017
+endef
+
+define Device/ikuai-ap
+    $(Device/tplink-16mlzma)
+    BOARDNAME := iKuai-Panel-AP
+    DEVICE_PROFILE := ikuai-ap
+    TPLINK_HWID := 0x08410016
+endef
+
 define Device/tl-wr841n-v8
     $(Device/tplink-16mlzma)
     BOARDNAME := TL-WR841N-v8
@@ -621,6 +655,13 @@ define Device/tl-wr841n-v11
     TPLINK_HWID := 0x08410011
 endef
 
+define Device/tl-mw300-r4
+    $(Device/tplink-16mlzma)
+    BOARDNAME := TL-MW300-r4
+    DEVICE_PROFILE := TLWR841
+    TPLINK_HWID := 0x08410012
+endef
+
 define Device/tl-wr842n-v2
     $(Device/tplink-8mlzma)
     BOARDNAME := TL-WR842N-v2
@@ -641,7 +682,29 @@ define Device/tl-wr847n-v8
     DEVICE_PROFILE := TLWR841
     TPLINK_HWID := 0x08470008
 endef
-TARGET_DEVICES += tl-wr841n-v8 tl-wr841n-v9 tl-wr841n-v10 tl-wr841n-v11 tl-wr842n-v2 tl-wr843nd-v1 tl-wr847n-v8
+TARGET_DEVICES += fap-022wld ikuai-ap tl-wr841n-v8 tl-wr841n-v9 tl-wr841n-v10 tl-wr841n-v11 tl-mw300-r4 tl-wr842n-v2 tl-wr843nd-v1 tl-wr847n-v8
+
+define Device/pisen-wfr101n
+    $(Device/tplink-16mlzma)
+    BOARDNAME := PISEN_WFR101N
+    DEVICE_PROFILE := PISEN
+    TPLINK_HWID := 0x30100101
+endef
+
+define Device/pisen-wmb001n
+    $(Device/tplink-16mlzma)
+    BOARDNAME := PISEN_WMB001N
+    DEVICE_PROFILE := PISEN
+    TPLINK_HWID := 0x30100102
+endef
+
+define Device/pisen-wpr003n
+    $(Device/tplink-16mlzma)
+    BOARDNAME := PISEN_WPR003N
+    DEVICE_PROFILE := PISEN
+    TPLINK_HWID := 0x30100103
+endef
+TARGET_DEVICES += pisen-wfr101n pisen-wmb001n pisen-wpr003n
 
 define Device/tl-wr941nd-v5
     $(Device/tplink-4mlzma)
@@ -664,6 +727,7 @@ define Device/tl-wr941nd-v6-cn
     DEVICE_PROFILE := TLWR941
     TPLINK_HWID := 0x09410006
 endef
+
 TARGET_DEVICES += tl-wr941nd-v5 tl-wr941nd-v6 tl-wr941nd-v6-cn
 
 define Device/tl-wr1041n-v2
@@ -1100,6 +1164,7 @@ mynet_n600_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,64k(devdat
 mynet_rext_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,7808k(firmware),64k(nvram)ro,64k(ART)ro
 zyx_nbg6716_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,64k(env)ro,64k(RFdata)ro,-(nbu);ar934x-nfc:2048k(zyxel_rfsd),2048k(romd),1024k(header),2048k(kernel),-(ubi)
 qihoo_c301_mtdlayout=mtdparts=spi0.0:256k(u-boot)ro,64k(u-boot-env),64k(devdata),64k(devconf),15744k(firmware),64k(warm_start),64k(action_image_config),64k(radiocfg)ro;spi0.1:15360k(upgrade2),1024k(privatedata)
+belair20e11_mtdlayout=mtdparts=flash:192k(breed)ro,64k(breed-env)ro,64k(art)ro,1536k(kernel),-(rootfs),-@0x50000(firmware)
 
 
 define Image/BuildKernel
@@ -1988,6 +2053,7 @@ $(eval $(call SingleProfile,AthLzma,64k,WLR8100,wlr8100,WLR8100,ttyS0,115200,$$(
 $(eval $(call SingleProfile,AthLzma,64k,WPJ344_16M,wpj344-16M,WPJ344,ttyS0,115200,$$(wpj344_mtdlayout_16M),KRuImage,65536))
 $(eval $(call SingleProfile,AthLzma,64k,WPJ531_16M,wpj531-16M,WPJ531,ttyS0,115200,$$(wpj531_mtdlayout_16M),KRuImage,65536))
 $(eval $(call SingleProfile,AthLzma,64k,WPJ558_16M,wpj558-16M,WPJ558,ttyS0,115200,$$(wpj558_mtdlayout_16M),KRuImage,65536))
+$(eval $(call SingleProfile,AthLzma,64k,BELAIR20E11,belair20e-11,BELAIR20E-11,ttyS0,115200,$$(belair20e11_mtdlayout),KRuImage))
 
 $(eval $(call SingleProfile,Belkin,64k,F9K1115V2,f9k1115v2,F9K1115V2,ttyS0,115200,$$(f9k1115v2_mtdlayout),BR-6679BAC))
 

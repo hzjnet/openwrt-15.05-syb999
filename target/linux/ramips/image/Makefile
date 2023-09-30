@@ -541,23 +541,35 @@ endif
 #
 
 ifeq ($(SUBTARGET),mt7621-nand)
-  TARGET_DEVICES +=
-endif
 
 define Device/hc5962
   DTS := HC5962
   BLOCKSIZE := 128KiB
-  IMAGES := sysupgrade.bin
   PAGESIZE := 2048
   KERNEL_SIZE := 2097152
+  IMAGE_SIZE := 127232k
   FILESYSTEMS := squashfs
-  IMAGE/sysupgrade.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(ralink_default_fw_size_32M)
+  IMAGES := factory.bin
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
 endef
 TARGET_DEVICES += hc5962
 
-define Device/mi-router-ac2100
-  DTS := MI-ROUTER-AC2100
+define Device/nokia-a040wq
+  DTS := NOKIA-A040WQ
   BLOCKSIZE := 128KiB
+  PAGESIZE := 2048
+  KERNEL_SIZE := 2048k
+  IMAGE_SIZE := 124928k
+  FILESYSTEMS := squashfs
+  IMAGES := factory.bin
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
+endef
+TARGET_DEVICES += nokia-a040wq
+
+define Device/mir3g
+  DTS := MIR3G
+  BLOCKSIZE := 128KiB
+  IMAGES := factory.bin
   PAGESIZE := 2048
   KERNEL_SIZE := 4096k
   IMAGE_SIZE := 120320k
@@ -566,26 +578,55 @@ define Device/mi-router-ac2100
   IMAGES += kernel1.bin rootfs0.bin
   IMAGE/kernel1.bin := append-kernel
   IMAGE/rootfs0.bin := append-ubi | check-size $$$$(IMAGE_SIZE)
-  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
+endef
+TARGET_DEVICES += mir3g
+
+define Device/mi-router-ac2100
+  DTS := MI-ROUTER-AC2100
+  BLOCKSIZE := 128KiB
+  IMAGES := factory.bin
+  PAGESIZE := 2048
+  KERNEL_SIZE := 4096k
+  IMAGE_SIZE := 120320k
+  UBINIZE_OPTS := -E 5
+  FILESYSTEMS := squashfs
+  IMAGES += kernel1.bin rootfs0.bin
+  IMAGE/kernel1.bin := append-kernel
+  IMAGE/rootfs0.bin := append-ubi | check-size $$$$(IMAGE_SIZE)
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
 endef
 TARGET_DEVICES += mi-router-ac2100
 
 define Device/redmi-router-ac2100
   DTS := REDMI-ROUTER-AC2100
   BLOCKSIZE := 128KiB
+  IMAGES := factory.bin
   PAGESIZE := 2048
   KERNEL_SIZE := 4096k
   IMAGE_SIZE := 120320k
   UBINIZE_OPTS := -E 5
   FILESYSTEMS := squashfs
-  IMAGES += kernel1.bin rootfs0.bin factory.bin
+  IMAGES += kernel1.bin rootfs0.bin
   IMAGE/kernel1.bin := append-kernel
   IMAGE/rootfs0.bin := append-ubi | check-size $$$$(IMAGE_SIZE)
-  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
-  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(ralink_default_fw_size_32M)
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
 endef
 TARGET_DEVICES += redmi-router-ac2100
 
+define Device/zte-e8820s
+  DTS := ZTE-E8820S
+  BLOCKSIZE := 128KiB
+  PAGESIZE := 2048
+  KERNEL_SIZE := 2097152
+  IMAGE_SIZE := 127232k
+  FILESYSTEMS := squashfs
+  IMAGES := factory.bin
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
+endef
+TARGET_DEVICES += zte-e8820s
+
+endif
 #
 # MT7628 Profiles
 #

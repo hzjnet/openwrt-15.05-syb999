@@ -22,6 +22,30 @@ ubnt-unifi-outdoor)
 	ucidef_set_interface_lan "eth0 eth1"
 	;;
 
+belair20e11)
+	ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+	ucidef_add_switch "switch0" "1" "1"
+	ucidef_add_switch_vlan "switch0" "1" "0t 1 2 3 4"
+	ucidef_add_switch_vlan "switch0" "2" "0t 5"
+	mac_lan=$(cat /sys/class/net/eth0/address)
+	[ -n "$mac_lan" ] && ucidef_set_interface_macaddr "lan" "$mac_lan"
+	mac_wan=$(macaddr_add "$mac_lan" -1)
+	[ -n "$mac_wan" ] && ucidef_set_interface_macaddr "wan" "$mac_wan"
+	;;
+
+ikuai-ap)
+	ucidef_set_interfaces_lan_wan "eth1.1" "eth1.2"
+	ucidef_add_switch "switch0" "1" "1"
+	ucidef_add_switch_vlan "switch0" "1" "0t 3 4"
+	ucidef_add_switch_vlan "switch0" "2" "0t 1"
+	;;
+
+fap-022wld)
+	ucidef_set_interfaces_lan_wan "eth1" "eth0"
+	ucidef_add_switch "switch0" "1" "1"
+	ucidef_add_switch_vlan "switch0" "1" "0 2 3"
+	;;
+
 letv)
 	ucidef_set_interfaces_lan_wan "eth0" "eth1"
 	ucidef_add_switch "switch0" "1" "1"
@@ -52,6 +76,17 @@ csac)
 	ucidef_add_switch "switch0" "1" "1"
 	ucidef_add_switch_vlan "switch0" "1" "0t 1 2 3 4"
 	ucidef_add_switch_vlan "switch0" "2" "0t 5"
+	mac_lan=$(cat /sys/class/net/eth0/address)
+	[ -n "$mac_lan" ] && ucidef_set_interface_macaddr "lan" "$mac_lan"
+	mac_wan=$(macaddr_add "$mac_lan" +1)
+	[ -n "$mac_wan" ] && ucidef_set_interface_macaddr "wan" "$mac_wan"
+	;;
+
+mi4pro)
+	ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+	ucidef_add_switch "switch0" "1" "1"
+	ucidef_add_switch_vlan "switch0" "1" "0t 2 3 4"
+	ucidef_add_switch_vlan "switch0" "2" "0t 1"
 	mac_lan=$(cat /sys/class/net/eth0/address)
 	[ -n "$mac_lan" ] && ucidef_set_interface_macaddr "lan" "$mac_lan"
 	mac_wan=$(macaddr_add "$mac_lan" +1)
@@ -275,6 +310,10 @@ tl-wr841n-v8 |\
 tl-wr842n-v2 |\
 tl-wr941nd-v5 |\
 tl-wr941nd-v6 |\
+tl-mw300-r4 |\
+pisen-wfr101n |\
+pisen-wmb001n |\
+pisen-wpr003n |\
 wnr2000-v3 |\
 wnr2000-v4 |\
 wnr2200 |\
@@ -494,6 +533,15 @@ wzr-hp-ag300h)
 	ucidef_set_interfaces_lan_wan "eth0" "eth1"
 	ucidef_add_switch "switch0" "1" "1"
 	ucidef_add_switch_vlan "switch0" "1" "0 1 2 3 4"
+	;;
+
+wb2000)
+	ucidef_set_interface_lan "eth0 eth1"
+	ucidef_set_interface_wan "eth0"
+	mac_lan=$(cat /sys/class/net/eth0/address)
+	[ -n "$mac_lan" ] && ucidef_set_interface_macaddr "lan" "$mac_lan"
+	mac_wan=$(cat /sys/class/net/eth0/address)
+	[ -n "$mac_wan" ] && ucidef_set_interface_macaddr "wan" "$mac_wan"
 	;;
 
 wzr-hp-g450h)

@@ -27,6 +27,28 @@ endef
 $(eval $(call Profile,CPE510))
 
 
+define Profile/fap-022wld
+	NAME:=PHICOMM FAP-022WLD
+	PACKAGES:=panel-ap-setup
+endef
+
+define Profile/fap-022wld/Description
+	Package set optimized for the PHICOMM FAP-022WLD Panel AP.
+endef
+$(eval $(call Profile,fap-022wld))
+
+
+define Profile/ikuai-ap
+	NAME:=iKuai Panel AP
+	PACKAGES:=panel-ap-setup
+endef
+
+define Profile/ikuai-ap/Description
+	Package set optimized for the ikuai Panel AP.
+endef
+$(eval $(call Profile,ikuai-ap))
+
+
 define Profile/TLMR10U
 	NAME:=TP-LINK TL-MR10U
 	PACKAGES:=kmod-usb-core kmod-usb2
@@ -255,6 +277,17 @@ endef
 $(eval $(call Profile,TLWA901))
 
 
+define Profile/WB2000
+	NAME:=WB2000
+	PACKAGES:=kmod-usb-core kmod-usb2 kmod-ledtrig-usbdev kmod-sound-ak4430
+endef
+
+define Profile/WB2000/Description
+	Package set optimized for WB2000.
+endef
+$(eval $(call Profile,WB2000))
+
+
 define Profile/TLWDR4300
 	NAME:=TP-LINK TL-WDR3500/3600/4300/4310/MW4350R
 	PACKAGES:=kmod-usb-core kmod-usb2 kmod-ledtrig-usbdev
@@ -330,6 +363,17 @@ define Profile/TLWR841/Description
 	Package set optimized for the TP-LINK TL-WR841N/ND.
 endef
 $(eval $(call Profile,TLWR841))
+
+
+define Profile/PISEN
+	NAME:=PISEN Cloud Router
+	PACKAGES:=kmod-usb-core kmod-usb2 kmod-sound-ak4430
+endef
+
+define Profile/PISEN/Description
+	Package set optimized for the PISEN_WFR101N/PISEN_WMB001N/PISEN_WPR003N.
+endef
+$(eval $(call Profile,PISEN))
 
 
 define Profile/TLWR842

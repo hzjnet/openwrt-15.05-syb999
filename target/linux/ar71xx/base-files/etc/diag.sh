@@ -18,6 +18,9 @@ get_status_led() {
 	antminer-s3)
 		status_led="antminer-s3:green:system"
 		;;
+	belair20e11)
+		status_led="belair:blue:power"
+		;;
 	letv)
 		status_led="letv:green:status"
 		;;
@@ -29,6 +32,9 @@ get_status_led() {
 		;;
 	csac)
 		status_led="csac:green:status"
+		;;
+	mi4pro)
+		status_led="mi4pro:blue:system"
 		;;
 	ap132)
 		status_led="ap132:green:status"
@@ -280,6 +286,7 @@ get_status_led() {
 	tl-wa901nd-v2 | \
 	tl-wa901nd-v3 | \
 	tl-wa901nd-v4 | \
+	wb2000 | \
 	tl-wdr3500 | \
 	tl-wr1041n-v2 | \
 	tl-wr1043nd | \
@@ -290,6 +297,8 @@ get_status_led() {
 	tl-wr841n-v7 | \
 	tl-wr841n-v8 | \
 	tl-wr841n-v11 | \
+	tl_mw300_r4 | \
+	pisen_wmb001n | \
 	tl-wa830re-v2 | \
 	tl-wr842n-v2 | \
 	tl-wr941nd | \

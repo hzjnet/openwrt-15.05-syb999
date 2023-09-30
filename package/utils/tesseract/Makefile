@@ -7,18 +7,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tesseract
-PKG_VERSION:=4.0.0
-PKG_RELEASE:=2
+PKG_VERSION:=4.1.1
+PKG_RELEASE:=$(AUTORELEASE)
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/tesseract-ocr/tesseract/tar.gz/$(PKG_VERSION)?
-PKG_MD5SUM:=ebed139edb16f10c5ba6ee3bf38f7dc5
+PKG_MD5SUM:=51fe2bcbff1bbce77a25d180fd247f7d
 
 PKG_MAINTAINER:=Valentin Kivachuk <vk18496@gmail.com>
 PKG_LICENSE:=Apache-2.0
 PKG_LICENSE_FILES:=LICENSE
 
-PKG_BUILD_PARALLEL:=1
 CMAKE_BINARY_SUBDIR:=openwrt-build
 
 include $(INCLUDE_DIR)/package.mk
@@ -30,7 +29,7 @@ define Package/tesseract
   CATEGORY:=Utilities
   TITLE:=Tesseract Open Source OCR Engine
   URL:=https://github.com/tesseract-ocr/tesseract
-  DEPENDS:=+libleptonica +libpthread +libstdcpp
+  DEPENDS:=+libleptonica +libarchive +libpthread +libstdcpp
 endef
 
 TARGET_CFLAGS:=$(filter-out -O%,$(TARGET_CFLAGS)) -O3
@@ -54,6 +53,8 @@ define Package/tesseract/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib*.so.* $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/share/tessdata
+	$(INSTALL_BIN) ./files/*.traineddata $(1)/usr/share/tessdata/
 endef
 
 $(eval $(call BuildPackage,tesseract))

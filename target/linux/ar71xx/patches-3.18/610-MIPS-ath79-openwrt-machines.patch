@@ -1,6 +1,6 @@
 --- a/arch/mips/ath79/machtypes.h
 +++ b/arch/mips/ath79/machtypes.h
-@@ -16,22 +16,206 @@
+@@ -16,22 +16,215 @@
  
  enum ath79_mach_type {
  	ATH79_MACH_GENERIC = 0,
@@ -12,6 +12,7 @@
 +	ATH79_MACH_ALL0315N,		/* Allnet ALL0315N */
 +	ATH79_MACH_K2T,			/* Phicomm K2T A1/A2/A3 board */
 +	ATH79_MACH_CSAC,		/* CSAC-III board */
++	ATH79_MACH_MI4PRO,		/* XIAOMI4-PRO */
 +	ATH79_MACH_LETV,		/* LETV board */
 +	ATH79_MACH_LG_A291Q,		/* LG-A291Q board */
 +	ATH79_MACH_AP113,		/* Atheros AP113 reference board */
@@ -56,9 +57,11 @@
 +	ATH79_MACH_EL_MINI,		/* EasyLink EL-MINI */
 +	ATH79_MACH_ESR1750,		/* EnGenius ESR1750 */
 +	ATH79_MACH_F9K1115V2,		/* Belkin AC1750DB */
++	ATH79_MACH_FAP_022WLD,		/* PHICOMM FAP-022WLD Panel AP */
 +	ATH79_MACH_GL_INET,		/* GL-CONNECT GL-INET */
 +	ATH79_MACH_GS_OOLITE,           /* GS OOLITE V1.0 */
 +	ATH79_MACH_HIWIFI_HC6361,	/* HiWiFi HC6361 */
++	ATH79_MACH_IKUAI_AP,		/* iKuai Panel AP */
 +	ATH79_MACH_JA76PF,		/* jjPlus JA76PF */
 +	ATH79_MACH_JA76PF2,		/* jjPlus JA76PF2 */
 +	ATH79_MACH_JWAP003,		/* jjPlus JWAP003 */
@@ -152,6 +155,7 @@
 +	ATH79_MACH_TL_WR841N_V8,	/* TP-LINK TL-WR841N/ND v8 */
 +	ATH79_MACH_TL_WR841N_V9,	/* TP-LINK TL-WR841N/ND v9 */
 +	ATH79_MACH_TL_WR841N_V11,	/* TP-LINK TL-WR841N/ND v11 */
++	ATH79_MACH_TL_MW300_R4,		/* TL-MW300R4 I2S Audio */
 +	ATH79_MACH_TL_WR842N_V2,	/* TP-LINK TL-WR842N/ND v2 */
 +	ATH79_MACH_TL_WR941ND,		/* TP-LINK TL-WR941ND */
 +	ATH79_MACH_TL_WR941ND_V5,	/* TP-LINK TL-WR941ND v5 */
@@ -204,12 +208,17 @@
 +	ATH79_MACH_WZR_450HP2,		/* Buffalo WZR-450HP2 */
 +	ATH79_MACH_ZCN_1523H_2,		/* Zcomax ZCN-1523H-2-xx */
 +	ATH79_MACH_ZCN_1523H_5,		/* Zcomax ZCN-1523H-5-xx */
++	ATH79_MACH_BELAIR20E_11,	/* BelAir Networks BelAir20E-11 */
++	ATH79_MACH_PISEN_WFR101N,       /* PISEN-WFR101N */
++	ATH79_MACH_PISEN_WMB001N,       /* PISEN-WMB001N */
++	ATH79_MACH_PISEN_WPR003N,       /* PISEN-WPR003N */
++	ATH79_MACH_WB2000,       /* Winchannel WB2000 */
  };
  
  #endif /* _ATH79_MACHTYPE_H */
 --- a/arch/mips/ath79/Kconfig
 +++ b/arch/mips/ath79/Kconfig
-@@ -2,6 +2,120 @@ if ATH79
+@@ -2,6 +2,130 @@ if ATH79
  
  menu "Atheros AR71XX/AR724X/AR913X machine selection"
  
@@ -251,6 +260,16 @@
 +	select ATH79_DEV_LEDS_GPIO
 +	select ATH79_DEV_M25P80
 +	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++	select ATH79_DEV_AP9X_PCI if PCI
++
++config ATH79_MACH_MI4PRO
++	bool "MI4PRO"
++	select SOC_QCA956X
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
 +	select ATH79_DEV_WMAC
 +	select ATH79_DEV_AP9X_PCI if PCI
 +
@@ -330,7 +349,7 @@
  config ATH79_MACH_AP121
  	bool "Atheros AP121 reference board"
  	select SOC_AR933X
-@@ -11,62 +114,1071 @@ config ATH79_MACH_AP121
+@@ -11,62 +124,1090 @@ config ATH79_MACH_AP121
  	select ATH79_DEV_M25P80
  	select ATH79_DEV_USB
  	select ATH79_DEV_WMAC
@@ -773,6 +792,15 @@
 +	select ATH79_DEV_M25P80
 +	select ATH79_DEV_WMAC
 +
++config ATH79_MACH_FAP_022WLD
++	bool "PHICOMM FAP-022WLD Panel AP board support"
++	select SOC_AR934X
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_WMAC
++
 +config ATH79_MACH_GS_OOLITE
 +       bool "GS Oolite V1 support"
 +       select SOC_AR933X
@@ -786,6 +814,16 @@
 +config ATH79_MACH_HIWIFI_HC6361
 +	bool "HiWiFi HC6361 board support"
 +	select SOC_AR933X
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++
++config ATH79_MACH_IKUAI_AP
++	bool "iKuai Panel AP board support"
++	select SOC_AR934X
 +	select ATH79_DEV_ETH
 +	select ATH79_DEV_GPIO_BUTTONS
 +	select ATH79_DEV_LEDS_GPIO
@@ -1430,10 +1468,31 @@
  
  config ATH79_MACH_UBNT_XM
  	bool "Ubiquiti Networks XM/UniFi boards"
-@@ -83,6 +1195,106 @@ config ATH79_MACH_UBNT_XM
+@@ -83,6 +1224,168 @@ config ATH79_MACH_UBNT_XM
  	  Say 'Y' here if you want your kernel to support the
  	  Ubiquiti Networks XM (rev 1.0) board.
  
++config ATH79_MACH_TL_MW300_R4
++	bool "TL-MW300_R4"
++	select SOC_AR934X
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++
++config ATH79_MACH_BELAIR20E_11
++	bool "BelAir Networks BelAir20E-11 support"
++	select SOC_AR934X
++	select ATH79_DEV_AP9X_PCI if PCI
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++
 +config ATH79_MACH_WEIO
 +	bool "WeIO board"
 +	select SOC_AR933X
@@ -1534,10 +1593,51 @@
 +	select ATH79_DEV_USB
 +	select ATH79_NVRAM
 +
++config ATH79_MACH_PISEN_WFR101N
++	bool "PISEN_WFR101N support"
++	select SOC_AR934X
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++
++config ATH79_MACH_PISEN_WMB001N
++	bool "PISEN_WMB001N support"
++	select SOC_AR934X
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++
++config ATH79_MACH_PISEN_WPR003N
++	bool "PISEN_WPR003N support"
++	select SOC_AR934X
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++
++config ATH79_MACH_WB2000
++	bool "Winchannel WB2000 board support"
++	select SOC_AR934X
++	select ATH79_DEV_AP9X_PCI if PCI
++	select ATH79_DEV_ETH
++	select ATH79_DEV_GPIO_BUTTONS
++	select ATH79_DEV_LEDS_GPIO
++	select ATH79_DEV_M25P80
++	select ATH79_DEV_USB
++	select ATH79_DEV_WMAC
++
  endmenu
  
  config SOC_AR71XX
-@@ -124,7 +1336,10 @@ config ATH79_DEV_DSA
+@@ -124,7 +1397,10 @@ config ATH79_DEV_DSA
  config ATH79_DEV_ETH
  	def_bool n
  
@@ -1549,7 +1649,7 @@
  	def_bool n
  
  config ATH79_DEV_GPIO_BUTTONS
-@@ -154,6 +1369,11 @@ config ATH79_PCI_ATH9K_FIXUP
+@@ -154,6 +1430,11 @@ config ATH79_PCI_ATH9K_FIXUP
  	def_bool n
  
  config ATH79_ROUTERBOOT
@@ -1563,7 +1663,7 @@
  endif
 --- a/arch/mips/ath79/Makefile
 +++ b/arch/mips/ath79/Makefile
-@@ -38,9 +38,134 @@ obj-$(CONFIG_ATH79_ROUTERBOOT)		+= route
+@@ -38,9 +38,143 @@ obj-$(CONFIG_ATH79_ROUTERBOOT)		+= route
  #
  # Machines
  #
@@ -1574,6 +1674,7 @@
 +obj-$(CONFIG_ATH79_MACH_ALL0315N)	+= mach-all0315n.o
 +obj-$(CONFIG_ATH79_MACH_K2T)		+= mach-k2t.o
 +obj-$(CONFIG_ATH79_MACH_CSAC)		+= mach-csac.o
++obj-$(CONFIG_ATH79_MACH_MI4PRO)	+= mach-mi4pro.o
 +obj-$(CONFIG_ATH79_MACH_LETV)		+= mach-letv.o
 +obj-$(CONFIG_ATH79_MACH_LG_A291Q)	+= mach-lg-a291q.o
 +obj-$(CONFIG_ATH79_MACH_AP113)		+= mach-ap113.o
@@ -1608,9 +1709,11 @@
 +obj-$(CONFIG_ATH79_MACH_EL_MINI)	+= mach-el-mini.o
 +obj-$(CONFIG_ATH79_MACH_ESR1750)	+= mach-esr1750.o
 +obj-$(CONFIG_ATH79_MACH_F9K1115V2)	+= mach-f9k1115v2.o
++obj-$(CONFIG_ATH79_MACH_FAP_022WLD)	+= mach-fap-022wld.o
 +obj-$(CONFIG_ATH79_MACH_GL_INET)	+= mach-gl-inet.o
 +obj-$(CONFIG_ATH79_MACH_GS_OOLITE)	+= mach-gs-oolite.o
 +obj-$(CONFIG_ATH79_MACH_HIWIFI_HC6361)	+= mach-hiwifi-hc6361.o
++obj-$(CONFIG_ATH79_MACH_IKUAI_AP)		+= mach-ikuai-ap.o
 +obj-$(CONFIG_ATH79_MACH_JA76PF)		+= mach-ja76pf.o
 +obj-$(CONFIG_ATH79_MACH_JWAP003)	+= mach-jwap003.o
 +obj-$(CONFIG_ATH79_MACH_HORNET_UB)	+= mach-hornet-ub.o
@@ -1660,6 +1763,7 @@
 +obj-$(CONFIG_ATH79_MACH_TL_WR841N_V1)	+= mach-tl-wr841n.o
 +obj-$(CONFIG_ATH79_MACH_TL_WR841N_V8)	+= mach-tl-wr841n-v8.o
 +obj-$(CONFIG_ATH79_MACH_TL_WR841N_V9)	+= mach-tl-wr841n-v9.o
++obj-$(CONFIG_ATH79_MACH_TL_MW300_R4)	+= mach-tl-mw300-r4.o
 +obj-$(CONFIG_ATH79_MACH_TL_WR941ND)	+= mach-tl-wr941nd.o
 +obj-$(CONFIG_ATH79_MACH_TL_WR941ND_V6)	+= mach-tl-wr941nd-v6.o
 +obj-$(CONFIG_ATH79_MACH_TL_WR1041N_V2)	+= mach-tl-wr1041n-v2.o
@@ -1698,6 +1802,11 @@
 +obj-$(CONFIG_ATH79_MACH_ZCN_1523H)	+= mach-zcn-1523h.o
 +obj-$(CONFIG_ATH79_MACH_CARAMBOLA2)	+= mach-carambola2.o
 +obj-$(CONFIG_ATH79_MACH_NBG6716)	+= mach-nbg6716.o
++obj-$(CONFIG_ATH79_MACH_BELAIR20E_11)	+= mach-belair20e-11.o
++obj-$(CONFIG_ATH79_MACH_PISEN_WFR101N)	+= mach-pisen-wfr101n.o
++obj-$(CONFIG_ATH79_MACH_PISEN_WMB001N)	+= mach-pisen-wmb001n.o
++obj-$(CONFIG_ATH79_MACH_PISEN_WPR003N)	+= mach-pisen-wpr003n.o
++obj-$(CONFIG_ATH79_MACH_WB2000)	+= mach-wb2000.o
 --- a/arch/mips/ath79/prom.c
 +++ b/arch/mips/ath79/prom.c
 @@ -180,6 +180,12 @@ void __init prom_init(void)

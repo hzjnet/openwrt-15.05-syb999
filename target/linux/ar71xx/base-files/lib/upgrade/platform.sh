@@ -7,6 +7,7 @@
 
 PART_NAME=firmware
 RAMFS_COPY_DATA=/lib/ar71xx.sh
+RAMFS_COPY_BIN='nandwrite'
 
 CI_BLKSZ=65536
 CI_LDADR=0x80060000
@@ -252,6 +253,7 @@ platform_check_image() {
 	unifi | \
 	unifi-outdoor | \
 	carambola2 | \
+	belair20e11 | \
 	weio )
 		[ "$magic" != "2705" ] && {
 			echo "Invalid image type."
@@ -320,7 +322,9 @@ platform_check_image() {
 	archer-c7 | \
 	el-m150 | \
 	el-mini | \
+	fap-022wld | \
 	gl-inet | \
+	ikuai-ap | \
 	mc-mac1200r | \
 	minibox-v1 |\
 	onion-omega | \
@@ -348,6 +352,7 @@ platform_check_image() {
 	tl-wa901nd-v2 | \
 	tl-wa901nd-v3 | \
 	tl-wa901nd-v4 | \
+	wb2000 | \
 	tl-wdr3500 | \
 	tl-wdr4300 | \
 	tl-wdr4900-v2 | \
@@ -363,6 +368,10 @@ platform_check_image() {
 	tl-wr841n-v8 | \
 	tl-wr841n-v9 | \
 	tl-wr841n-v11 | \
+	tl-mw300-r4 | \
+	pisen-wfr101n | \
+	pisen-wmb001n | \
+	pisen-wpr003n | \
 	tl-wr842n-v2 | \
 	tl-wr941nd | \
 	tl-wr941nd-v5 | \
@@ -408,6 +417,7 @@ platform_check_image() {
 			echo "Invalid image type."
 			return 1
 		}
+
 		return 0
 		;;
 
@@ -416,7 +426,14 @@ platform_check_image() {
 			echo "Invalid image type."
 			return 1
 		}
+		return 0
+		;;
 
+	mi4pro)
+		[ "$magic_long" != "68737173" -a "$magic_long" != "19852003" ] && {
+			echo "Invalid image type."
+			return 1
+		}
 		return 0
 		;;
 

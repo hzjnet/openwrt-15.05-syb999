@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ath10k-firmware
-PKG_SOURCE_DATE:=2021-05-14
-PKG_SOURCE_VERSION:=b44d86faba7c91115e4e8f020fd8a09ce752c454
-PKG_MD5SUM:=337938ab585cc7baed0b21e4f1ed7bf1
+PKG_SOURCE_DATE:=2021-06-22
+PKG_SOURCE_VERSION:=91e35569a86984d64c0271d29a0be16413eb1179
+PKG_MD5SUM:=104a7139201bffc2cd17a48e23cafb0f
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
@@ -97,14 +97,14 @@ $(eval $(call Download,ath10k-firmware-qca9887-ct-htt))
 QCA99X0_FIRMWARE_FILE_CT:=firmware-5-ct-full-community-12.bin-lede.017
 define Download/ath10k-firmware-qca99x0-ct
   $(call Download/ct-firmware,QCA99X0,ath10k-10-4b)
-  MD5SUM:=aa0e230b3f458b396f9db64c386ac5da
+  MD5SUM:=d45de3fc1988948bb98a3aaf24895242
 endef
 $(eval $(call Download,ath10k-firmware-qca99x0-ct))
 
 QCA99X0_FIRMWARE_FILE_CT_HTT:=firmware-5-ct-full-htt-mgt-community-12.bin-lede.017
 define Download/ath10k-firmware-qca99x0-ct-htt
   $(call Download/ct-firmware-htt,QCA99X0,ath10k-10-4b)
-  MD5SUM:=28b006881b5d3e253da35c55f8e55059
+  MD5SUM:=8f6b4f24917f67fedef2bc5bb2b18dcb
 endef
 $(eval $(call Download,ath10k-firmware-qca99x0-ct-htt))
 
@@ -423,7 +423,7 @@ define Package/ath10k-firmware-qca9888/install
 		$(PKG_BUILD_DIR)/QCA9888/hw2.0/board-2.bin \
 		$(1)/lib/firmware/ath10k/QCA9888/hw2.0/board-2.bin
 	$(INSTALL_DATA) \
-		$(PKG_BUILD_DIR)/QCA9888/hw2.0/3.9.0.2/firmware-5.bin_10.4-3.9.0.2-00142 \
+		$(PKG_BUILD_DIR)/QCA9888/hw2.0/3.9.0.2/firmware-5.bin_10.4-3.9.0.2-00152 \
 		$(1)/lib/firmware/ath10k/QCA9888/hw2.0/firmware-5.bin
 endef
 

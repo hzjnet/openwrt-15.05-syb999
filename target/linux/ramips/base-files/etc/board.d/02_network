@@ -106,6 +106,13 @@ ramips_setup_interfaces()
 		ucidef_add_switch_vlan "switch0" "2" "0 9t"
 		;;
 
+	bussiness-router)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "0 1 2 3 6t"
+		ucidef_add_switch_vlan "switch0" "2" "4 6t"
+		;;
+
         re6500 | \
 	asl26555)
 		ucidef_set_interface_lan "eth0.1"
@@ -154,7 +161,8 @@ ramips_setup_interfaces()
 	wt1520 | \
 	hc5661a | \
 	miwifi-nano |\
-	youku-yk1|\
+	youku-yk-l1|\
+	youku-yk-l1c|\
 	psg1208|\
 	psg1218|\
 	jcg-y2|\
@@ -197,6 +205,13 @@ ramips_setup_interfaces()
 		ucidef_add_switch_vlan "switch0" "2" "0 6t"
 		;;
 
+	mir3g)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "2 3 6t"
+		ucidef_add_switch_vlan "switch0" "2" "1 6t"
+		;;
+
 	mi-router-ac2100|\
 	redmi-router-ac2100)
 		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
@@ -212,7 +227,38 @@ ramips_setup_interfaces()
 		ucidef_add_switch_vlan "switch0" "2" "4 6t"
 		;;
 
+	wna4320v2|\
+	micap-1321w)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "1 6t"
+		ucidef_add_switch_vlan "switch0" "2" "0 6t"
+		;;
+
+	ytxc-oem-ap)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "0 6t"
+		ucidef_add_switch_vlan "switch0" "2" "4 6t"
+		;;
+
+	mt7621-rtl8367s)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "0 1 2 3 6t"
+		ucidef_add_switch_vlan "switch0" "2" "4 6t"
+		ucidef_add_switch "switch1" "1" "1"
+		ucidef_add_switch_vlan "switch1" "3" "0t 1t 2t 3t 4t 6t"
+		;;
+
 	newifi-d2)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "0 1 2 3 6t"
+		ucidef_add_switch_vlan "switch0" "2" "4 6t"
+		;;
+
+	nokia-a040wq)
 		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
 		ucidef_add_switch "switch0" "1" "1"
 		ucidef_add_switch_vlan "switch0" "1" "0 1 2 3 6t"
@@ -250,6 +296,13 @@ ramips_setup_interfaces()
 		ucidef_add_switch "switch0" "1" "1"
 		ucidef_add_switch_vlan "switch0" "1" "1 2 3 4 6t"
 		ucidef_add_switch_vlan "switch0" "2" "0 6t"
+		;;
+
+	mb-0002)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "0 6t"
+		ucidef_add_switch_vlan "switch0" "2" "4 6t"
 		;;
 
 	ur-336un)
@@ -323,7 +376,7 @@ ramips_setup_interfaces()
 		ucidef_add_switch_vlan "switch0" "2" "4 6t"
 		;;
 
-	daishuyun)
+	dsbox-dsr1)
 		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
 		ucidef_add_switch "switch0" "1" "1"
 		ucidef_add_switch_vlan "switch0" "1" "1 6t"
@@ -338,7 +391,7 @@ ramips_setup_interfaces()
 		ucidef_add_switch_vlan "switch0" "2" "4 6t"
 		;;
 
-	jdcloud-1)
+	jdcloud-re-sp-01b)
 		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
 		ucidef_add_switch "switch0" "1" "1"
 		ucidef_add_switch_vlan "switch0" "1" "1 2 6t"
@@ -372,6 +425,13 @@ ramips_setup_interfaces()
 		ucidef_add_switch "switch0" "1" "1"
 		ucidef_add_switch_vlan "switch0" "1" "1 2 3 4 5t"
 		ucidef_add_switch_vlan "switch0" "2" "0 5t"
+		;;
+
+	zte-e8820s)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "0 1 2 3 6t"
+		ucidef_add_switch_vlan "switch0" "2" "4 6t"
 		;;
 	*)
 		RT3X5X=`cat /proc/cpuinfo | egrep "(RT3.5|RT5350)"`
@@ -446,7 +506,7 @@ ramips_setup_macs()
 		;;
 
 	fwr200-v2 | \
-	daishuyun)
+	dsbox-dsr1)
 		lan_mac=$(mtd_get_mac_binary factory 4)
 		wan_mac=$(macaddr_add "$lan_mac" -1)
 		;;
@@ -457,7 +517,7 @@ ramips_setup_macs()
 		wan_mac=$(macaddr_add "$lan_mac" -1)
 		;;
 
-	jdcloud-1)
+	jdcloud-re-sp-01b)
 		lan_mac=$(mtd_get_mac_binary factory 57344)
 		wan_mac=$(macaddr_add "$lan_mac" -1)
 		;;
@@ -468,9 +528,21 @@ ramips_setup_macs()
 		wan_mac=$(mtd_get_mac_binary factory 46)
 		;;
 
+	mir3g)
+		lan_mac=$(mtd_get_mac_binary Factory 57350)
+		wan_mac=$(macaddr_add "$lan_mac" -1)
+		;;
+
+
 	newifi-d1)
 		lan_mac=$(cat /sys/class/net/eth0/address)
 		wan_mac=$(macaddr_add "$lan_mac" -1)
+		;;
+
+	nokia-a040wq)
+		eth0_mac=$(cat /sys/class/net/eth0/address)
+		lan_mac=$(macaddr_add "$eth0_mac" -1)
+		wan_mac=$(macaddr_add "$eth0_mac" -2)
 		;;
 
 	hc5611 | \
@@ -534,6 +606,11 @@ ramips_setup_macs()
 	linkits7688d)
 		wan_mac=$(mtd_get_mac_binary factory 4)
 		lan_mac=$(mtd_get_mac_binary factory 46)
+		;;
+
+	zte-e8820s)
+		lan_mac=$(mtd_get_mac_binary factory 57344)
+		wan_mac=$(macaddr_add "$lan_mac" -1)
 		;;
 	*)
 		lan_mac=$(cat /sys/class/net/eth0/address)

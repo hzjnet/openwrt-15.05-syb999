@@ -21,6 +21,8 @@ DTS_DIR:=$(LINUX_DIR)/arch/$(LINUX_KARCH)/boot/dts
 EXTRA_NAME_SANITIZED=$(call sanitize,$(EXTRA_IMAGE_NAME))
 
 IMG_PREFIX:=openwrt-$(if $(CONFIG_VERSION_FILENAMES),$(VERSION_NUMBER)-)$(BOARD)$(if $(SUBTARGET),-$(SUBTARGET))
+IMG_ROOTFS:=$(IMG_PREFIX)-rootfs
+IMG_COMBINED:=$(IMG_PREFIX)-combined
 
 MKFS_DEVTABLE_OPT := -D $(INCLUDE_DIR)/device_table.txt
 
@@ -125,6 +127,17 @@ define Image/BuildKernel/MkFIT
 	PATH=$(LINUX_DIR)/scripts/dtc:$(PATH) mkimage -f $(KDIR)/fit-$(1).its $(KDIR)/fit-$(1)$(7).itb
 endef
 
+define Image/pad-to
+	dd if=$(1) of=$(1).new bs=$(2) conv=sync
+	mv $(1).new $(1)
+endef
+
+ROOTFS_PARTSIZE=$(shell echo $$(($(CONFIG_TARGET_ROOTFS_PARTSIZE)*1024*1024)))
+
+define Image/pad-root-squashfs
+	$(call Image/pad-to,$(KDIR)/root.squashfs,$(if $(1),$(1),$(CONFIG_TARGET_ROOTFS_PARTSIZE)M))
+endef
+
 # $(1) source dts file
 # $(2) target dtb file
 # $(3) extra CPP flags
@@ -199,6 +212,23 @@ ifneq ($(CONFIG_NAND_SUPPORT),)
 
 endif
 
+define Image/gzip-ext4-padded-squashfs
+
+  define Image/Build/squashfs
+	$(call Image/pad-root-squashfs)
+  endef
+
+  ifneq ($(CONFIG_TARGET_IMAGES_GZIP),)
+    define Image/Build/gzip/ext4
+		$(call Image/Build/gzip,ext4)
+    endef
+    define Image/Build/gzip/squashfs
+		$(call Image/Build/gzip,squashfs)
+    endef
+  endif
+
+endef
+
 ifneq ($(CONFIG_TARGET_ROOTFS_UBIFS),)
     define Image/mkfs/ubifs/generate
 	$(CP) ./ubinize$(1).cfg $(KDIR)
@@ -256,7 +286,7 @@ define Image/mkfs/ext4
 	$(STAGING_DIR_HOST)/bin/make_ext4fs \
 		-l $(E2SIZE) -b $(CONFIG_TARGET_EXT4_BLOCKSIZE) \
 		-i $(CONFIG_TARGET_EXT4_MAXINODE) \
-		-m $(CONFIG_TARGET_EXT4_RESERVED_PCT) \
+		$(if $(CONFIG_TARGET_EXT4_RESERVED_PCT),-m $(CONFIG_TARGET_EXT4_RESERVED_PCT)) \
 		$(if $(CONFIG_TARGET_EXT4_JOURNAL),,-J) \
 		$(if $(SOURCE_DATE_EPOCH),-T $(SOURCE_DATE_EPOCH)) \
 		$(KDIR)/root.ext4 $(TARGET_DIR)/
@@ -275,6 +305,12 @@ define Image/mkfs/prepare
 	$(call Image/mkfs/prepare/default)
 endef
 
+define Image/Checksum
+	( cd ${BIN_DIR} ; \
+		$(FIND) -maxdepth 1 -type f \! -name 'md5sums'  -printf "%P\n" | sort | xargs $1 > $2 \
+	)
+endef
+
 define BuildImage/mkfs
   install: mkfs-$(1)
   .PHONY: mkfs-$(1)
@@ -287,6 +323,10 @@ define BuildImage/mkfs
 endef
 
 # Build commands that can be called from Device/* templates
+
+IMAGE_KERNEL = $(word 1,$^)
+IMAGE_ROOTFS = $(word 2,$^)
+
 define Build/uImage
 	mkimage -A $(LINUX_KARCH) \
 		-O linux -T kernel \
@@ -417,8 +457,7 @@ define Build/append-ubi
 endef
 
 define Build/pad-to
-	dd if=$@ of=$@.new bs=$(1) conv=sync
-	mv $@.new $@
+	$(call Image/pad-to,$@,$(1))
 endef
 
 json_quote=$(subst ','\'',$(subst ",\",$(1)))
@@ -454,6 +493,14 @@ define Build/sysupgrade-tar
 		$@
 endef
 
+define Build/combined-image
+       -sh $(TOPDIR)/scripts/combined-image.sh \
+               "$(word 1,$^)" \
+               "$@" \
+               "$@.new"
+       @mv $@.new $@
+endef
+
 define Device/Init
   PROFILES := $(PROFILE)
   DEVICE_NAME := $(1)
@@ -479,7 +526,16 @@ define Device/Init
   KERNEL_SIZE :=
 
   FILESYSTEMS := $(TARGET_FILESYSTEMS)
+
+  UBOOT_PATH :=  $(STAGING_DIR_IMAGE)/uboot-$(1)
 endef
+
+DEFAULT_DEVICE_VARS := \
+  DEVICE_NAME KERNEL KERNEL_INITRAMFS KERNEL_INITRAMFS_IMAGE KERNEL_SIZE \
+  CMDLINE UBOOTENV_IN_UBI KERNEL_IN_UBI BLOCKSIZE PAGESIZE SUBPAGESIZE \
+  VID_HDR_OFFSET UBINIZE_OPTS UBINIZE_PARTS MKUBIFS_OPTS DEVICE_DTS \
+  DEVICE_DTS_CONFIG DEVICE_DTS_DIR BOARD_NAME UIMAGE_NAME SUPPORTED_DEVICES \
+  IMAGE_METADATA KERNEL_ENTRY KERNEL_LOADADDR UBOOT_PATH
 
 define Device/ExportVar
   $(1) : $(2):=$$($(2))
@@ -647,5 +703,7 @@ define BuildImage
 		$(call Image/Build,$(fs))
 	)
 	$(call Image/mkfs/ubifs)
+	$(call Image/Checksum,md5sum --binary,md5sums)
+	$(call Image/Checksum,openssl dgst -sha256,sha256sums)
 
 endef

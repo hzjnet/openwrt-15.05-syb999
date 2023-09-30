@@ -189,6 +189,7 @@ define KernelPackage/ipt-filter/description
  Netfilter (IPv4) kernel modules for packet content inspection
  Includes:
  - string
+ - bpf
 endef
 
 $(eval $(call KernelPackage,ipt-filter))
@@ -288,6 +289,96 @@ endef
 $(eval $(call KernelPackage,ipt-ipset))
 
 
+IPVS_MODULES:= \
+	ipvs/ip_vs \
+	ipvs/ip_vs_lc \
+	ipvs/ip_vs_wlc \
+	ipvs/ip_vs_rr \
+	ipvs/ip_vs_wrr \
+	ipvs/ip_vs_lblc \
+	ipvs/ip_vs_lblcr \
+	ipvs/ip_vs_dh \
+	ipvs/ip_vs_sh \
+	ipvs/ip_vs_fo \
+	ipvs/ip_vs_nq \
+	ipvs/ip_vs_sed \
+	xt_ipvs
+
+define KernelPackage/nf-ipvs
+  SUBMENU:=Netfilter Extensions
+  TITLE:=IP Virtual Server modules
+  DEPENDS:=@IPV6 +kmod-lib-crc32c +kmod-ipt-conntrack +kmod-nf-conntrack +kmod-nf-conntrack6
+  KCONFIG:= \
+	CONFIG_IP_VS \
+	CONFIG_IP_VS_IPV6=y \
+	CONFIG_IP_VS_DEBUG=n \
+	CONFIG_IP_VS_PROTO_TCP=y \
+	CONFIG_IP_VS_PROTO_UDP=y \
+	CONFIG_IP_VS_PROTO_AH_ESP=y \
+	CONFIG_IP_VS_PROTO_ESP=y \
+	CONFIG_IP_VS_PROTO_AH=y \
+	CONFIG_IP_VS_PROTO_SCTP=y \
+	CONFIG_IP_VS_TAB_BITS=12 \
+	CONFIG_IP_VS_RR \
+	CONFIG_IP_VS_WRR \
+	CONFIG_IP_VS_LC \
+	CONFIG_IP_VS_WLC \
+	CONFIG_IP_VS_FO \
+	CONFIG_IP_VS_LBLC \
+	CONFIG_IP_VS_LBLCR \
+	CONFIG_IP_VS_DH \
+	CONFIG_IP_VS_SH \
+	CONFIG_IP_VS_SED \
+	CONFIG_IP_VS_NQ \
+	CONFIG_IP_VS_SH_TAB_BITS=8 \
+	CONFIG_IP_VS_NFCT=y \
+	CONFIG_NETFILTER_XT_MATCH_IPVS
+  FILES:=$(foreach mod,$(IPVS_MODULES),$(LINUX_DIR)/net/netfilter/$(mod).ko)
+  $(call AddDepends/ipt,+kmod-ipt-conntrack,+kmod-nf-conntrack)
+endef
+
+define KernelPackage/nf-ipvs/description
+ IPVS (IP Virtual Server) implements transport-layer load balancing inside
+ the Linux kernel so called Layer-4 switching.
+endef
+
+$(eval $(call KernelPackage,nf-ipvs))
+
+
+define KernelPackage/nf-ipvs-ftp
+  SUBMENU:=$(NF_MENU)
+  TITLE:=Virtual Server FTP protocol support
+  KCONFIG:=CONFIG_IP_VS_FTP
+  DEPENDS:=kmod-nf-ipvs +kmod-nf-nat +kmod-nf-nathelper
+  FILES:=$(LINUX_DIR)/net/netfilter/ipvs/ip_vs_ftp.ko
+endef
+
+define KernelPackage/nf-ipvs-ftp/description
+  In the virtual server via Network Address Translation,
+  the IP address and port number of real servers cannot be sent to
+  clients in ftp connections directly, so FTP protocol helper is
+  required for tracking the connection and mangling it back to that of
+  virtual service.
+endef
+
+$(eval $(call KernelPackage,nf-ipvs-ftp))
+
+
+define KernelPackage/nf-ipvs-sip
+  SUBMENU:=$(NF_MENU)
+  TITLE:=Virtual Server SIP protocol support
+  KCONFIG:=CONFIG_IP_VS_PE_SIP
+  DEPENDS:=kmod-nf-ipvs +kmod-nf-nathelper-extra
+  FILES:=$(LINUX_DIR)/net/netfilter/ipvs/ip_vs_pe_sip.ko
+endef
+
+define KernelPackage/nf-ipvs-sip/description
+  Allow persistence based on the SIP Call-ID
+endef
+
+$(eval $(call KernelPackage,nf-ipvs-sip))
+
+
 define KernelPackage/ipt-nat
   TITLE:=Basic NAT targets
   KCONFIG:=$(KCONFIG_IPT_NAT)
@@ -303,6 +394,28 @@ define KernelPackage/ipt-nat/description
 endef
 
 $(eval $(call KernelPackage,ipt-nat))
+
+
+define KernelPackage/ipt-raw
+  TITLE:=Netfilter IPv4 raw table support
+  KCONFIG:=CONFIG_IP_NF_RAW
+  FILES:=$(LINUX_DIR)/net/ipv4/netfilter/iptable_raw.ko
+  AUTOLOAD:=$(call AutoProbe,iptable_raw)
+  $(call AddDepends/ipt)
+endef
+
+$(eval $(call KernelPackage,ipt-raw))
+
+
+define KernelPackage/ipt-raw6
+  TITLE:=Netfilter IPv6 raw table support
+  KCONFIG:=CONFIG_IP6_NF_RAW
+  FILES:=$(LINUX_DIR)/net/ipv6/netfilter/ip6table_raw.ko
+  AUTOLOAD:=$(call AutoProbe,ip6table_raw)
+  $(call AddDepends/ipt,+kmod-ip6tables)
+endef
+
+$(eval $(call KernelPackage,ipt-raw6))
 
 
 define KernelPackage/ipt-nat6
@@ -603,12 +716,26 @@ define KernelPackage/ipt-extra/description
  Includes:
  - addrtype
  - owner
- - physdev (if bridge support was enabled in kernel)
  - pkttype
  - quota
 endef
 
 $(eval $(call KernelPackage,ipt-extra))
+
+
+define KernelPackage/ipt-physdev
+  TITLE:=physdev module
+  KCONFIG:=$(KCONFIG_IPT_PHYSDEV)
+  FILES:=$(foreach mod,$(IPT_PHYSDEV-m),$(LINUX_DIR)/net/$(mod).ko)
+  AUTOLOAD:=$(call AutoProbe,$(notdir $(IPT_PHYSDEV-m)))
+  $(call AddDepends/ipt,+kmod-br-netfilter)
+endef
+
+define KernelPackage/ipt-physdev/description
+ The iptables physdev kernel module
+endef
+
+$(eval $(call KernelPackage,ipt-physdev))
 
 
 define KernelPackage/ip6tables
@@ -658,6 +785,22 @@ define KernelPackage/arptables/description
 endef
 
 $(eval $(call KernelPackage,arptables))
+
+
+define KernelPackage/br-netfilter
+  SUBMENU:=$(NF_MENU)
+  TITLE:=Bridge netfilter support modules
+  DEPENDS:=+kmod-ipt-core +kmod-bridge
+  FILES:=$(LINUX_DIR)/net/bridge/br_netfilter.ko
+  KCONFIG:=CONFIG_BRIDGE_NETFILTER
+  AUTOLOAD:=$(call AutoProbe,br_netfilter)
+endef
+
+define KernelPackage/br-netfilter/description
+ Kernel modules for br-netfilter
+endef
+
+$(eval $(call KernelPackage,br-netfilter))
 
 
 define KernelPackage/ebtables

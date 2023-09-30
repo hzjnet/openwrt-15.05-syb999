@@ -225,6 +225,9 @@ tplink_board_detect() {
 	"342000"*)
 		model="TP-Link TL-MR3420"
 		;;
+	"002000"*)
+		model="WB2000"
+		;;
 	"350000"*)
 		model="TP-Link TL-WDR3500"
 		;;
@@ -354,6 +357,9 @@ ar71xx_board_detect() {
 	*Antminer-S3)
 		name="antminer-s3"
 		;;
+	*"BelAir20E-11")
+		name="belair20e11"
+		;;
 	*"LETV board")
 		name="letv"
 		;;
@@ -365,6 +371,9 @@ ar71xx_board_detect() {
 		;;
 	*"CSAC reference board")
 		name="csac"
+		;;
+	*"XiaoMi4-PRO")
+		name="mi4pro"
 		;;
 	*AP113)
 		name="ap113"
@@ -514,6 +523,12 @@ ar71xx_board_detect() {
 		if [ "x$size" = "x00f90000" ]; then
 			name="hornet-ub-x2"
 		fi
+		;;
+	*"iKuai Panel AP")
+		name="ikuai-ap"
+		;;
+	*"PHICOMM FAP-022WLD")
+		name="fap-022wld"
 		;;
 	*LS-SR71)
 		name="ls-sr71"
@@ -800,6 +815,9 @@ ar71xx_board_detect() {
 	*"TL-WA901ND v4")
 		name="tl-wa901nd-v4"
 		;;
+	*"WB2000")
+		name="wb2000"
+		;;
 	*"TL-WDR3500")
 		name="tl-wdr3500"
 		;;
@@ -835,6 +853,18 @@ ar71xx_board_detect() {
 		;;
 	*"TL-WR842N/ND v2")
 		name="tl-wr842n-v2"
+		;;
+	*"TL-MW300-r4")
+		name="tl-mw300-r4"
+		;;
+	*"PISEN_WFR101N")
+		name="pisen-wfr101n"
+		;;
+	*"PISEN_WMB001N")
+		name="pisen-wmb001n"
+		;;
+	*"PISEN_WPR003N")
+		name="pisen-wpr003n"
 		;;
 	*TL-WR941ND)
 		name="tl-wr941nd"

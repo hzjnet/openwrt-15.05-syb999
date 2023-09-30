@@ -56,6 +56,18 @@ define Device/zbt-wg2626
   IMAGE_SIZE := $(ralink_default_fw_size_16M)
 endef
 
+define Device/mt7621-rtl8367s
+  DTS := MT7621-RTL8367S
+  IMAGE_SIZE := $(ralink_default_fw_size_16M)
+endef
+TARGET_DEVICES += mt7621-rtl8367s
+
+define Device/bussiness-router
+  DTS := BUSSINESS-ROUTER
+  IMAGE_SIZE := $(ralink_default_fw_size_32M)
+endef
+TARGET_DEVICES += bussiness-router
+
 define Device/newifi-d1
   DTS := Newifi-D1
   IMAGE_SIZE := $(ralink_default_fw_size_32M)
@@ -98,11 +110,15 @@ define Device/ghl-r-001-f
 endef
 TARGET_DEVICES += ghl-r-001-f
 
-define Device/jdcloud-1
-  DTS := JDCloud-1
+define Device/jdcloud-re-sp-01b
+  DTS := JDCloud_RE-SP-01B
   IMAGE_SIZE := $(ralink_default_fw_size_32M)
+  DEVICE_TITLE := JDCloud RE-SP-01B
+  DEVICE_PACKAGES := kmod-usb-core kmod-usb3 kmod-usb-hid kmod-sdhci-mt7620 \
+		     kmod-ledtrig-usbdev kmod-mt7603 \
+		     kmod-mt7615e wpad-mini fixjdcmac
 endef
-TARGET_DEVICES += jdcloud-1
+TARGET_DEVICES += jdcloud-re-sp-01b
 
 define Device/xiaoyu-xy-c5
   DTS := XIAOYU-XY-C5

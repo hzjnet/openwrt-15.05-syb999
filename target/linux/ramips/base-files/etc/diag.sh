@@ -216,6 +216,9 @@ get_status_led() {
 	wsr-1166)
 		status_led="buffalo:orange:diag"
 		;;
+	wna4320v2)
+		status_led="wna4320v2:red:power"
+		;;
 	wnce2001)
 		status_led="netgear:green:power"
 		;;
@@ -258,11 +261,14 @@ get_status_led() {
 	y1s)
 		status_led="lenovo:blue:power"
 		;;
+	mir3g)
+		status_led="mir3g:yellow:status"
+		;;
 	newifi-d2)
 		status_led="newifi-d2:blue:power"
 		;;
-	daishuyun)
-		status_led="daishuyun:green:wifi"
+	dsbox-dsr1)
+		status_led="dsr1:green:status"
 		;;
 	psg1208)
 		status_led="phicomm:white:wps"
@@ -270,7 +276,7 @@ get_status_led() {
 	psg1218)
 		status_led="psg1218:blue:status"
 		;;
-	jdcloud-1)
+	jdcloud-re-sp-01b)
 		status_led="jdcloud:green:sysg"
 		;;
 	k2p)

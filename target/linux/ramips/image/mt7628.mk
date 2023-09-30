@@ -29,6 +29,24 @@ define Device/wdr5620v1
 endef
 TARGET_DEVICES += wdr5620v1
 
+define Device/micap-1321w
+  DTS := MICAP-1321W
+  IMAGE_SIZE := $(ralink_default_fw_size_8M)
+endef
+TARGET_DEVICES += micap-1321w
+
+define Device/wna4320v2
+  DTS := WNA4320V2
+  IMAGE_SIZE := $(ralink_default_fw_size_8M)
+endef
+TARGET_DEVICES += wna4320v2
+
+define Device/ytxc-oem-ap
+  DTS := YTXC-OEM-AP
+  IMAGE_SIZE := $(ralink_default_fw_size_8M)
+endef
+TARGET_DEVICES += ytxc-oem-ap
+
 define Device/wdr5640v1
   DTS := WDR5640V1
   IMAGE_SIZE := $(ralink_default_fw_size_16M)
