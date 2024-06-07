@@ -379,6 +379,9 @@ ramips_board_detect() {
 	*"TEW-692GR")
 		name="tew-692gr"
 		;;
+	*"TodaAir IN1251Y")
+		name="todaair-in1251y"
+		;;
 	*"Ralink V11ST-FE")
 		name="v11st-fe"
 		;;
@@ -432,6 +435,9 @@ ramips_board_detect() {
 		;;
 	*"MiWiFi Nano")
 		name="miwifi-nano"
+		;;
+	*"Xiaomi Mi Router 4C")
+		name="mi-router-4c"
 		;;
 	*"Sercomm NA930")
 		name="na930"

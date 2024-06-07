@@ -9,6 +9,8 @@ function ucidefault() {
 	uci set ffmpegtool.@ffmpegtool[0].risingfalling_tone="none" 2>&1 >/dev/null
 	uci set ffmpegtool.@ffmpegtool[0].a_speed_governing="none" 2>&1 >/dev/null
 	uci set ffmpegtool.@ffmpegtool[0].volume="none" 2>&1 >/dev/null
+	uci set ffmpegtool.@ffmpegtool[0].audio_separate="0" 2>&1 >/dev/null
+	uci set ffmpegtool.@ffmpegtool[0].audio_sept_silence="0" 2>&1 >/dev/null
 	uci set ffmpegtool.@ffmpegtool[0].audio_merge="0" 2>&1 >/dev/null
 	uci set ffmpegtool.@ffmpegtool[0].audio_ready="0" 2>&1 >/dev/null
 	uci set ffmpegtool.@ffmpegtool[0].image_effects="0" 2>&1 >/dev/null
@@ -96,7 +98,7 @@ function getheadtime_v() {
 	totaltime="$1"
 	video_headtime="$2"
 	inittime
-	endsec="$audio_headtime"
+	endsec="$video_headtime"
 	switchtime
 	param_starttime="-ss $thehour:$themin:$thesec"
 }
@@ -105,7 +107,7 @@ function gettailtime_v() {
 	totaltime="$1"
 	video_tailtime="$2"
 	inittime
-	endsec="$(expr $totalsec - $audio_tailtime)"
+	endsec="$(expr $totalsec - $video_tailtime)"
 	switchtime
 	param_endtime="-to $thehour:$themin:$thesec"
 }

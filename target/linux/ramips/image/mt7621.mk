@@ -116,9 +116,17 @@ define Device/jdcloud-re-sp-01b
   DEVICE_TITLE := JDCloud RE-SP-01B
   DEVICE_PACKAGES := kmod-usb-core kmod-usb3 kmod-usb-hid kmod-sdhci-mt7620 \
 		     kmod-ledtrig-usbdev kmod-mt7603 \
-		     kmod-mt7615e wpad-mini fixjdcmac
+		     kmod-mt7615e wpad-mini fixwlanmac
 endef
 TARGET_DEVICES += jdcloud-re-sp-01b
+
+define Device/todaair-in1251y
+  DTS := TodaAir-IN1251Y
+  IMAGE_SIZE := $(ralink_default_fw_size_16M)
+  DEVICE_TITLE := TodaAir IN1251Y
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615e mt7663-firmware-ap mt7663-firmware-sta
+endef
+TARGET_DEVICES += todaair-in1251y
 
 define Device/xiaoyu-xy-c5
   DTS := XIAOYU-XY-C5
