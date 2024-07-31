@@ -56,7 +56,7 @@ $(eval $(call KernelPackage,spi-vsc7385))
 define KernelPackage/sound-ak4430
   SUBMENU:=$(SOUND_MENU)
   TITLE:=ar71xx I2S Audio Driver
-  DEPENDS:=@TARGET_ar71xx +kmod-sound-core +kmod-sound-soc-core +kmod-regmap
+  DEPENDS:=@AUDIO_SUPPORT @TARGET_ar71xx +kmod-sound-core +kmod-sound-soc-core +kmod-regmap
   KCONFIG:= \
 	CONFIG_LZO_COMPRESS=y \
 	CONFIG_LZO_DECOMPRESS=y \
@@ -68,19 +68,19 @@ define KernelPackage/sound-ak4430
 	CONFIG_REGMAP_I2C=y \
 	CONFIG_REGMAP_SPI=y \
 	CONFIG_SND=y \
-	CONFIG_SND_ATH79_SOC_CODEC=y \
-	CONFIG_SND_ATH79_SOC_I2S=y \
+	CONFIG_SND_ATH79_SOC_CODEC=m \
+	CONFIG_SND_ATH79_SOC_I2S=m \
 	CONFIG_SND_COMPRESS_OFFLOAD=y \
 	CONFIG_SND_PCM=y \
 	CONFIG_SND_SOC=y \
-	CONFIG_SND_SOC_AK4430=y \
+	CONFIG_SND_SOC_AK4430=m \
 	CONFIG_SND_SOC_I2C_AND_SPI=y \
 	CONFIG_SND_TIMER=y \
 	CONFIG_SOUND=y \
 	CONFIG_ATH79_DEV_AUDIO=y \
-	CONFIG_SND_ATH79_SOC=y \
-	CONFIG_SND_ATH79_SOC_AP123_AK4430=y \
-	CONFIG_SND_SOC_AK4430=y
+	CONFIG_SND_ATH79_SOC=m \
+	CONFIG_SND_ATH79_SOC_AP123_AK4430=m \
+	CONFIG_SND_SOC_AK4430=m
   FILES:= \
 	$(LINUX_DIR)/sound/soc/ath79/snd-soc-ath79-i2s.ko \
 	$(LINUX_DIR)/sound/soc/ath79/snd-soc-ath79-pcm.ko \
@@ -96,3 +96,36 @@ define KernelPackage/sound-ak4430/description
 endef
 
 $(eval $(call KernelPackage,sound-ak4430))
+
+
+define KernelPackage/sound-uda1334
+  SUBMENU:=$(SOUND_MENU)
+  TITLE:=ar71xx I2S Audio Driver uda1334
+  DEPENDS:=@AUDIO_SUPPORT @TARGET_ar71xx +kmod-sound-core +kmod-sound-soc-core +kmod-regmap
+  KCONFIG:= \
+	CONFIG_MIGRATION=y \
+	CONFIG_SND=y \
+	CONFIG_SND_ATH79_SOC=m \
+	CONFIG_SND_ATH79_SOC_CODEC=m \
+	CONFIG_SND_ATH79_SOC_I2S=m \
+	CONFIG_SND_COMPRESS_OFFLOAD=y \
+	CONFIG_SND_PCM=y \
+	CONFIG_SND_SOC=y \
+	CONFIG_SND_SOC_UDA1334=m \
+	CONFIG_SND_TIMER=y \
+	CONFIG_SOUND=y \
+	CONFIG_ATH79_DEV_AUDIO=y
+  FILES:= \
+	$(LINUX_DIR)/sound/soc/ath79/snd-soc-ath79-i2s.ko \
+	$(LINUX_DIR)/sound/soc/ath79/snd-soc-ath79-pcm.ko \
+	$(LINUX_DIR)/sound/soc/ath79/snd-soc-ath79-codec.ko \
+	$(LINUX_DIR)/sound/soc/codecs/snd-soc-uda1334.ko
+  AUTOLOAD:=$(call AutoLoad,65,snd-soc-ath79-i2s snd-soc-ath79-pcm snd-soc-ath79-codec snd-soc-uda1334)
+  $(call AddDepends/sound)
+endef
+
+define KernelPackage/sound-uda1334/description
+ Audio modules for ar71xx uda1334 i2s controller.
+endef
+
+$(eval $(call KernelPackage,sound-uda1334))
